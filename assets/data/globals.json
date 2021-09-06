@@ -1,0 +1,29 @@
+{
+    "menuLinks": [
+        {
+          "icon": "mdi-cactus",
+          "title": "About Tequila",
+          "to": "/"
+        },
+        {
+          "icon": "mdi-bottle-tonic-outline",
+          "title": "Products",
+          "to": "/products"
+        },
+        {
+          "icon": "mdi-storefront-outline",
+          "title": "Shops",
+          "to": "/shops"
+        },
+        {
+          "icon": "mdi-book-open-variant",
+          "title": "References",
+          "to": "/references"
+        },
+        {
+          "icon": "mdi-database-plus-outline",
+          "title": "Register Data",
+          "to": "/register-data"
+        }
+      ]
+}

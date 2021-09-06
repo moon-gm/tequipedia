@@ -1,0 +1,33 @@
+{
+    "category": [
+        {
+            "id": "brands",
+            "icon": "mdi-hexagon-slice-6",
+            "title": "ブランド別",
+            "description": "ブランドごとに商品を紹介します。好みのブランドを見つけたい方や、ブランドの意外な商品を発掘したい方はこちらから",
+            "to": "/products/brands"
+        },
+        {
+            "id": "destiladors",
+            "icon": "mdi-warehouse",
+            "title": "蒸留所別",
+            "description": "蒸留所ごとに商品を紹介します。蒸留所ごとに特徴がありますので、好きなテキーラに似たものを探したい方はこちらから",
+            "to": "/products/destiladors"
+        },
+        {
+            "id": "area", 
+            "icon": "mdi-earth",
+            "title": "生産地方別",
+            "description": "生産地方ごとに商品を紹介します。生産される州・地方・地区によっても大まかにクセが異なるので、地域の特徴を知りたい方はこちらから",
+            "to": "/products/area"
+        },
+        {
+            "id": "agings",
+            "icon": "mdi-beer",
+            "title": "熟成度別",
+            "description": "熟成度ごとに商品を紹介します。熟成する期間で甘み・酸味・香りが変わるので、ストレートやカクテル、飲み方で選びたい方はこちらから",
+            "to": "/products/agings"
+        }
+    ],
+    "mainContents": []
+}
