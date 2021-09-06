@@ -167,9 +167,9 @@ export default {
                     });
 
                     switch (path) {
-                        case '/agings/all': this.agingsDataSet(response); break
-                        case '/locals/joinA': this.localsDataSet(response); break
-                        case '/destiladors/joinABLS': this.destiladorsDataSet(response); break
+                        case '/agings/category/all': this.agingsDataSet(response); break
+                        case '/locals/category/joinA': this.localsDataSet(response); break
+                        case '/destiladors/category/joinABLS': this.destiladorsDataSet(response); break
                     }
                 })
                 .catch(error => console.log("ERROR",error))

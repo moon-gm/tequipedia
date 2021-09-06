@@ -87,7 +87,7 @@ app.get('/get/:table/:category/:id', (req, res) => {
     const syouhinColumns = (
         req.params.category === 'brands' ? ['name', 'id']
         :
-        req.params.category === 'destiladors' ? ['name_kana', 'id']
+        req.params.category === 'destiladors' ? ['name_kana', 'nom']
         :
         req.params.category === 'agings' ? ['name_kana', 'id']
         : ''
@@ -110,13 +110,14 @@ app.get('/get/:table/:category/:id', (req, res) => {
         {
             'table': 'agings',
             'id': [
-                { 'key': req.params.id, 'sql': req.params.id === 'all' ? sql_selectColumun(req.params.category, syouhinColumns) : sql_selectProductCategory(req.params.category, req.params.id) },
+                { 'key': 'all', 'sql': sql_selectAll('agings') },
             ]
         },
         {
             'table': 'destiladors',
             'id': [
-                { 'key': req.params.id, 'sql': req.params.id === 'all' ? sql_selectColumun(req.params.category, syouhinColumns) : sql_selectProductCategory(req.params.category, req.params.id) },
+                { 'key': 'all', 'sql': sql_selectAll('destiladors') },
+                { 'key': 'joinABLS', 'sql': sql_destiladorsJoinABLS},
             ]
         },
     ]

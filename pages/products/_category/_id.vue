@@ -11,10 +11,10 @@
                 <v-card>
                     <v-card-title class="headline">
                         <v-icon left>{{ sectionData.icon }}</v-icon>
-                        {{ sectionData.title }}一覧
+                        {{ sectionData.title }} 一覧
                     </v-card-title>
                     <v-card-text>
-                        {{ sectionData.note ?  sectionData.note : '左上のサブメニューからブランドを選択して下さい。'}}
+                        {{ sectionData.note ?  sectionData.note : '左上のサブメニューから選択して下さい。'}}
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -77,6 +77,13 @@
                                                     {{ list }}
                                                 </li>
                                             </ul>
+                                            <v-btn
+                                                absolute right top
+                                                target="_blank"
+                                                :href="sectionData.url"
+                                            >
+                                                商品購入
+                                            </v-btn>
                                         </v-col>
                                     </v-row>
                                 <!-- Products Box -->
@@ -159,7 +166,7 @@ export default {
                     "image": [
                         {
                             "src": `/images/products/${data.image}`,
-                            "alt": data.syouhin_id
+                            "alt": data.syouhin_id,
                         }
                     ],
                     "list": [
@@ -173,7 +180,8 @@ export default {
                         `香り：${data.review_flavor}`,
                         `味：${data.review_top}`,
                         `余韻：${data.review_after}`,
-                    ]
+                    ],
+                    "url": data.syouhin_url
                 }
                 this.mainContents.push(insertData)
                 this.sideMenuItems.push(insertData)
@@ -199,18 +207,18 @@ export default {
                 :　''
             )
             const cond = (
-                category === 'brands' ? dataSet[0].brand_name
+                category === 'brands' ? [dataSet[0].brand_name, pageData.category[0].icon]
                 :
-                category === 'destiladors' ? `${dataSet[0].dest_name_kana}(Nom ${dataSet[0].dest_nom})`
+                category === 'destiladors' ? [`Nom ${dataSet[0].dest_nom} ${dataSet[0].dest_name_kana}`, pageData.category[1].icon]
                 :
-                category === 'agings' ? agingsReplace
+                category === 'agings' ? [agingsReplace, pageData.category[3].icon]
                 : ''
             )
             this.categories = [
                 {
                     id: category,
-                    title: cond,
-                    icon: "mdi-hexagon-slice-6",
+                    title: cond[0],
+                    icon: cond[1],
                     note: "右上のサイドメニューからページ内ジャンプ、左上サブメニューから他のページにリンクできます。"
                 }
             ]
@@ -221,17 +229,17 @@ export default {
             const category = this.$route.params.category
             dataSet.map(data => {
                 const cond = (
-                    category === 'brands' ? [data.name, data.id]
+                    category === 'brands' ? [data.name, data.id, pageData.category[0].icon]
                     :
-                    category === 'destiladors' ? [data.name_kana, data.id]
+                    category === 'destiladors' ? [`Nom ${data.nom}`, data.nom, pageData.category[1].icon]
                     :
-                    category === 'agings' ? [data.name_kana, data.id]
+                    category === 'agings' ? [data.name_kana, data.id, pageData.category[3].icon]
                     : ''
                 )
                 const insertData = {
                     "title": cond[0],
                     "to": `/products/${category}/${cond[1]}`,
-                    "icon": 'mdi-bookmark-outline'
+                    "icon": cond[2]
                 }
                 this.subMenuItems.push(insertData)
             })
