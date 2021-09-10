@@ -2,13 +2,13 @@
     <v-row justify="center" align="start">
         <!-- Section Area -->
             <v-col
-                v-for="(sectionData, secIndex) in pageData"
-                :key="sectionData + secIndex"
+                v-for="(secData, secIdx) in mainContents"
+                :key="secData + secIdx"
                 cols="12" sm="10" md="9"
             >
                 <!-- Space for Header Height -->
                     <v-spacer
-                        :id="sectionData.id"
+                        :id="secData.id"
                         :style="`margin-bottom: ${headerHeight}px;`"
                     />
                 <!-- Space for Header Height -->
@@ -18,25 +18,31 @@
                         <v-card-title
                             class="headline section"
                         >
-                            {{ secIndex + 1 }}. {{ sectionData.title }}
+                            <v-icon
+                                left
+                                :color="pageInfo.color"
+                            >
+                                {{ pageInfo.icon }}
+                            </v-icon>
+                            {{ secIdx + 1 }}. {{ secData.title }}
                         </v-card-title>
                     </v-card>
                 <!-- Section Title -->
 
                 <!-- Sub Section Area -->
                     <v-card
-                        v-for="(subSectionData, subSecIndex) in sectionData.contents"
-                        :key="subSectionData + subSecIndex"
-                        :class="sectionData.contents.length !== subSecIndex && 'sub-section'"
+                        v-for="(subsecData, subsecIdx) in secData.contents"
+                        :key="subsecData + subsecIdx"
+                        :class="secData.contents.length !== subsecIdx && 'sub-section'"
                     >                    
 
                         <!-- Sub Section Title -->
                             <!-- Case [Define Tequila] -->
                                 <v-card-title
-                                    v-if="secIndex === 1"
-                                    :class="subSecIndex === 0 ? 'title' : 'subtitle-1'"
+                                    v-if="secIdx === 1"
+                                    :class="subsecIdx === 0 ? 'title' : 'subtitle-1'"
                                 >
-                                    {{ subSecIndex === 0 ? `${secIndex + 1}-${subSecIndex + 1}. ${subSectionData.title}` : `${subSecIndex}. ${subSectionData.title}` }}
+                                    {{ subsecIdx === 0 ? `${secIdx + 1}-${subsecIdx + 1}. ${subsecData.title}` : `${subsecIdx}. ${subsecData.title}` }}
                                 </v-card-title>
                             <!-- Case [Define Tequila] -->
                             <!-- Default -->
@@ -44,7 +50,7 @@
                                     v-else
                                     class="title"
                                 >
-                                    {{ secIndex + 1 }}-{{ subSecIndex + 1 }}. {{ subSectionData.title }}
+                                    {{ secIdx + 1 }}-{{ subsecIdx + 1 }}. {{ subsecData.title }}
                                 </v-card-title>
                             <!-- Default -->
                         <!-- Sub Section Title -->
@@ -54,21 +60,21 @@
                                 
                                 <!-- Case Paragraph -->
                                     <p
-                                        v-if="subSectionData.paragraph"
+                                        v-if="subsecData.paragraph"
                                         class="paragraph-style"
                                     >
-                                        {{ subSectionData.paragraph }}
+                                        {{ subsecData.paragraph }}
                                     </p>
                                 <!-- Case Paragraph -->
 
                                 <!-- Case Image -->
                                     <v-row
-                                        v-if="subSectionData.image"
+                                        v-if="subsecData.image"
                                         justify="space-around"
                                         align="center"
                                     >
                                         <v-col
-                                            v-for="(image) in subSectionData.image"
+                                            v-for="(image) in subsecData.image"
                                             :key="image.alt"
                                             cols="auto"
                                         >
@@ -86,10 +92,10 @@
 
                                 <!-- Case List -->
                                     <ul
-                                        v-if="subSectionData.list"
+                                        v-if="subsecData.list"
                                         class="list-style"
                                     >
-                                        <li v-for="(list) in subSectionData.list">
+                                        <li v-for="(list) in subsecData.list">
                                             {{ list }}
                                         </li>
                                     </ul>
@@ -97,11 +103,11 @@
 
                                 <!-- Case Table -->
                                     <v-data-Table
-                                        v-if="subSectionData.table"
-                                        :headers="subSectionData.table.header"
-                                        :items="subSectionData.table.items"
-                                        :items-per-page="subSectionData.table.perPage"
-                                        :group-by="subSectionData.table.groupBy"
+                                        v-if="subsecData.table"
+                                        :headers="subsecData.table.header"
+                                        :items="subsecData.table.items"
+                                        :items-per-page="subsecData.table.perPage"
+                                        :group-by="subsecData.table.groupBy"
                                         multi-sort
                                     />
                                 <!-- Case Table -->
@@ -117,10 +123,12 @@
 </template>
 
 <script>
-import pageData from '~/assets/data/index.json'
+import { mainContents } from '~/assets/data/index.json'
+import { menuLinks } from '~/assets/data/globals.json'
 
+const pageIdx = 0
 const sideMenuItems = []
-pageData.map((item, index) => {
+mainContents.map((item) => {
     sideMenuItems.push({
         title: item.title,
         to: `/#${item.id}`
@@ -130,103 +138,87 @@ pageData.map((item, index) => {
 export default {
     data () {
         return {
+            mainContents: mainContents,
+            pageInfo: menuLinks[pageIdx],
+            subMenuItems: [],
             sideMenuItems: sideMenuItems,
-            pageData: pageData,
             headerHeight: 0,
-            dataTable: {
-                agings: [],
-                locals: [],
-                destiladors: [],
-            }
         }
     },
 
     mounted () {
-        // Side Menu Setting
+
+        // Set Sub Menu
+        this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
+        // Set Side Menu
         this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
 
-        // Get Header Height & Scroll
+        // Get Header Height & Scroll Setting
         this.headerHeight = document.getElementsByClassName('getHeader')[0].clientHeight
         window.scrollTo(0, this.headerHeight)
 
-        // Get Data From Each Tables
-        {
-            const requests = [
-                { path: '/locals/category/joinA' },
-                { path: '/agings/category/all' },
-                { path: '/destiladors/category/joinABLS' },
-            ]
-                
-            const getData = async (path) => {
-                await this.$axios.$get(`/server/get${path}`)
-                .then(response => {
-                    console.log({
-                        'Request': 'OK',
-                        'Path': `/server/get${path}`,
-                        'Response': response
-                    });
-
-                    switch (path) {
-                        case '/agings/category/all': this.agingsDataSet(response); break
-                        case '/locals/category/joinA': this.localsDataSet(response); break
-                        case '/destiladors/category/joinABLS': this.destiladorsDataSet(response); break
-                    }
-                })
-                .catch(error => console.log("ERROR",error))
-            }
-            
-            requests.map(req => getData(req.path))
-            
-        }
+        // Get Request Data & Set Response Data
+        const requests = [
+            {path: '/locals/category/joinA'},
+            {path: '/agings/category/all'},
+            {path: '/destiladors/category/joinABLS'},
+        ]
+        requests.map(req => this.getData(req)) 
 
     },
 
     methods: {
-        // Agings Data Table Setting
-        agingsDataSet(dataSet) {
-            dataSet.map(data => {
-                const insertData = {
-                    name: data.name_kana,
-                    mean: data.definition,
-                    rule: data.rule
-                }
-                this.dataTable.agings.push(insertData)
-                this.pageData[5].contents[0].table.items = this.dataTable.agings
+
+        // Get Request Data
+        async getData(req) {
+            const reqPath = `/server/get${req.path}`
+            await this.$axios.$get(reqPath)
+            .then(response => {
+                console.log({'Request Path': reqPath, 'Response': response})
+                this.setData(response, req.path.split('/')[1])
             })
-            return this.dataTable.agings
+            .catch(error => console.log('ERROR', error))
         },
-        // Locals Data Table Setting
-        localsDataSet(dataSet) {
-            dataSet.map(data => {
-                const insertData = {
-                    local: data.local_name_kana,
-                    area: data.area_name_kana
+
+        // Set Response Data
+        setData(response, patern) {
+            let insertData = {}
+            response.map(data => {
+                switch (patern) {
+                    case 'locals':
+                        insertData = {
+                            local: data.local_name_kana,
+                            area: data.area_name_kana
+                        }
+                        this.mainContents[2].contents[1].table.items.push(insertData);
+                    break
+                    case 'agings':
+                        insertData = {
+                            name: data.name_kana,
+                            mean: data.definition,
+                            rule: data.rule
+                        }
+                        this.mainContents[5].contents[0].table.items.push(insertData);
+                    break
+                    case 'destiladors':
+                        insertData = {
+                            local: data.local_name === 'その他' ? 'ハリスコ州外' : data.local_name,
+                            dest: data.dest_name,
+                            nom: data.nom,
+                            brand: data.brand_name,
+                            area: data.local_name === 'その他' ? data.state_name + data.area_name : data.area_name,
+                        }
+                        this.mainContents[8].contents[0].table.items.push(insertData);
+                    break
                 }
-                this.dataTable.locals.push(insertData)
-                this.pageData[2].contents[1].table.items = this.dataTable.locals
             })
-            return this.dataTable.locals
         },
-        // Destiladors Data Table Setting
-        destiladorsDataSet(dataSet) {
-            dataSet.map(data => {
-                const insertData = {
-                    local: data.local_name === 'その他' ? 'ハリスコ州外' : data.local_name,
-                    dest: data.dest_name,
-                    nom: data.nom,
-                    brand: data.brand_name,
-                    area: data.local_name === 'その他' ? data.state_name + data.area_name : data.area_name,
-                }
-                this.dataTable.destiladors.push(insertData)
-                this.pageData[8].contents[0].table.items = this.dataTable.destiladors
-            })
-            return this.dataTable.destiladors
-        },
+
     } 
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .list-style {
         padding: 20px;
     }

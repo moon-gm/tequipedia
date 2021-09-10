@@ -1,166 +1,163 @@
 <template>
-    <!-- Layout start -->
-    <v-app dark>
+    <!-- Layout -->
+        <v-app dark>
 
-        <!-- Global-Menu-Area start -->
-        <v-navigation-drawer
-            v-model="drawer"
-            :mini-variant="miniVariant"
-            :clipped="clipped"
-            fixed
-            app
-        >
-            <v-list>
+            <!-- Global Menu Area -->
+                <v-navigation-drawer
+                    v-model="drawer"
+                    :mini-variant="miniVariant"
+                    :clipped="clipped"
+                    fixed
+                    app
+                >
+                    <v-list>
 
-                <!-- Menu Title start -->
-                <v-list-item>
-                    <v-list-item-title v-text="'Menu'" />
-                </v-list-item>
-                <!-- Menu Title end -->
+                        <!-- Global Menu Title -->
+                            <v-list-item>
+                                <v-list-item-title v-text="'Global Menu'" />
+                            </v-list-item>
+                        <!-- Global Menu Title -->
 
-                <!-- Menu Contents start -->
-                <v-list-item
-                    v-for="(item, i) in menuItems"
-                    :key="i"
-                    :to="item.to"
-                    router
-                    exact
+                        <!-- Global Menu Contents -->
+                            <v-list-item
+                                v-for="(item, i) in menuItems"
+                                :key="'globalmenu' + i"
+                                :to="item.to"
+                                router
+                                exact
+                            >
+
+                                <v-list-item-action>
+                                    <v-icon :color="item.color">{{ item.icon }}</v-icon>
+                                </v-list-item-action>
+
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.title" />
+                                </v-list-item-content>
+
+                            </v-list-item>
+                        <!-- Global Menu Contents -->
+
+                        <v-divider/>
+
+                        <!-- Sub Menu Title -->
+                            <v-list-item>
+                                <v-list-item-title v-text="'Sub Menu'" />
+                            </v-list-item>
+                        <!-- Sub Menu Title -->
+
+                        <!-- Sub Menu Contents -->
+                            <v-list-item
+                                v-for="(item, i) in subMenuItems"
+                                :key="'submenu' + i"
+                                :to="item.to"
+                                router
+                                exact
+                            >
+
+                                <v-list-item-action>
+                                    <v-icon :color="item.color">{{ item.icon }}</v-icon>
+                                </v-list-item-action>
+
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.title" />
+                                </v-list-item-content>
+
+                            </v-list-item>
+                        <!-- Sub Menu Contents -->
+
+                    </v-list>
+                </v-navigation-drawer>
+            <!-- Global Menu Area -->
+
+            <!-- Header Area -->
+                <v-app-bar
+                    :clipped-left="clipped"
+                    fixed
+                    app
+                    class="getHeader"
+                >
+                    <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+                    <v-toolbar-title v-text="title" />
+                    <v-spacer />
+                    <v-btn
+                        icon
+                        @click.stop="rightDrawer = !rightDrawer"
+                    >
+                        <v-icon>mdi-backburger</v-icon>
+                    </v-btn>
+                </v-app-bar>
+            <!-- Header Area -->
+
+            <!--  Main Contents Area -->
+                <v-main>
+                    <v-container>
+                        <Nuxt />
+                    </v-container>
+                </v-main>
+            <!--  Main Contents Area -->
+
+            <!-- Side Menu Area -->
+                <v-navigation-drawer
+                    v-model="rightDrawer"
+                    :right="right"
+                    temporary
+                    fixed
                 >
 
-                    <v-list-item-action>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-action>
+                    <v-list>
 
-                    <v-list-item-content>
-                        <v-list-item-title v-text="item.title" />
-                    </v-list-item-content>
+                        <v-list-item>Side Menu</v-list-item>
 
-                </v-list-item>
-                <!-- Menu Contents end -->
+                        <v-list-item
+                            v-for="(item, i) in sideMenuItems"
+                            :key="'sidemenu' + i"
+                            :to="item.to"
+                            router
+                            exact
+                        >
+                            <v-list-item-action v-if="item.icon">
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-list-item-action>
 
-                <!-- Sub Menu Title start -->
-                <v-list-item>
-                    <v-list-item-title v-text="'Sub Menu'" />
-                </v-list-item>
-                <!-- Sub Menu Title end -->
+                            <v-list-item-content>
+                                <v-list-item-title>
+                                    {{ !item.icon ? `${i + 1}. ` : ''}}{{ item.title }}
+                                </v-list-item-title>
+                            </v-list-item-content>
 
-                <!-- Sub Menu Contents start -->
-                <v-list-item
-                    v-for="(item, i) in subMenuItems"
-                    :key="item.title + i"
-                    :to="item.to"
-                    router
-                    exact
-                >
+                        </v-list-item>
 
-                    <v-list-item-action>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-action>
+                        <v-divider/>
 
-                    <v-list-item-content>
-                        <v-list-item-title v-text="item.title" />
-                    </v-list-item-content>
+                        <v-list-item>Layout Menu</v-list-item>
 
-                </v-list-item>
-                <!-- Sub Menu Contents end -->
+                        <v-list-item
+                            v-for="(item, i) in sideLayoutItems"
+                            :key="'layoutmenu' + i"
+                            @click.stop="item.data"
+                        >
+                            <v-list-item-action>
+                                <v-icon>
+                                    {{ item.icon }}
+                                </v-icon>
+                            </v-list-item-action>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item>
 
-            </v-list>
-        </v-navigation-drawer>
-        <!-- Global-Menu-Area end -->
+                    </v-list>
 
-        <!-- Header-Area start -->
-        <v-app-bar
-            :clipped-left="clipped"
-            fixed
-            app
-            class="getHeader"
-        >
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-            <v-toolbar-title v-text="title" />
-            <v-spacer />
-            <v-btn
-                icon
-                @click.stop="rightDrawer = !rightDrawer"
-            >
-                <v-icon>mdi-backburger</v-icon>
-            </v-btn>
-        </v-app-bar>
-        <!-- Header-Area end -->
+                </v-navigation-drawer>
+            <!-- Side Menu Area -->
 
-        <!--  Main-Contents-Area start -->
-        <v-main>
-            <v-container>
-                <Nuxt />
-            </v-container>
-        </v-main>
-        <!--  Main-Contents-Area end -->
+            <!-- Footer Area -->
+                <v-footer app :absolute="!fixed">
+                    <span>&copy; {{ title }} {{ new Date().getFullYear() }}</span>
+                </v-footer>
+            <!-- Footer Area -->
 
-        <!-- Side-Menu-Area start -->
-        <v-navigation-drawer
-            v-model="rightDrawer"
-            :right="right"
-            temporary
-            fixed
-        >
-
-            <v-list>
-
-                <v-list-item>Layout Functions</v-list-item>
-
-                <v-list-item
-                    v-for="(item, i) in sideLayoutItems"
-                    :key="item + i"
-                    @click.stop="item.data"
-                >
-                    <v-list-item-action>
-                        <v-icon>
-                            {{ item.icon }}
-                        </v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-
-            </v-list>
-
-            <v-list>
-
-                <v-list-item>Side Menu</v-list-item>
-
-                <v-list-item
-                    v-for="(item, i) in sideMenuItems"
-                    :key="item + i"
-                    :to="item.to"
-                    router
-                    exact
-                >
-                    <v-list-item-action v-if="item.icon">
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-action>
-
-                    <v-list-item-content>
-                        <v-list-item-title>
-                            {{ !item.icon ? i + 1 + '. ' : ''}}{{ item.title }}
-                        </v-list-item-title>
-                    </v-list-item-content>
-
-                </v-list-item>
-
-            </v-list>
-
-        </v-navigation-drawer>
-        <!-- Side-Menu-Area end -->
-
-        <!-- Footer-Area start -->
-        <v-footer
-            :absolute="!fixed"
-            app
-        >
-            <span>&copy; {{ title }} {{ new Date().getFullYear() }}</span>
-        </v-footer>
-        <!-- Footer-Area end -->
-
-    </v-app>
-    <!-- Layout end -->
+        </v-app>
+    <!-- Layout -->
 </template>
 
 <script>

@@ -1,29 +1,34 @@
 {
     "menuLinks": [
         {
-          "icon": "mdi-cactus",
-          "title": "About Tequila",
-          "to": "/"
+            "title": "About Tequila",
+            "color": "green",
+            "icon": "mdi-cactus",
+            "to": "/"
         },
         {
-          "icon": "mdi-bottle-tonic-outline",
-          "title": "Products",
-          "to": "/products"
+            "title": "Products",
+            "color": "orange",
+            "icon": "mdi-bottle-tonic-outline",
+            "to": "/products"
         },
         {
-          "icon": "mdi-storefront-outline",
-          "title": "Shops",
-          "to": "/shops"
+            "title": "Shops",
+            "color": "yellow",
+            "icon": "mdi-storefront-outline",
+            "to": "/shops"
         },
         {
-          "icon": "mdi-book-open-variant",
-          "title": "References",
-          "to": "/references"
+            "title": "References",
+            "color": "blue",
+            "icon": "mdi-book-open-variant",
+            "to": "/references"
         },
         {
-          "icon": "mdi-database-plus-outline",
-          "title": "Register Data",
-          "to": "/register-data"
+            "title": "Register Data",
+            "color": "red",
+            "icon": "mdi-database-plus-outline",
+            "to": "/register-data"
         }
-      ]
+    ]
 }
