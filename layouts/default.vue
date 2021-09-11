@@ -10,15 +10,14 @@
                     fixed
                     app
                 >
-                    <v-list>
 
-                        <!-- Global Menu Title -->
+                    <!-- Global Menu -->
+                        <v-list>
+
                             <v-list-item>
                                 <v-list-item-title v-text="'Global Menu'" />
                             </v-list-item>
-                        <!-- Global Menu Title -->
 
-                        <!-- Global Menu Contents -->
                             <v-list-item
                                 v-for="(item, i) in menuItems"
                                 :key="'globalmenu' + i"
@@ -36,17 +35,18 @@
                                 </v-list-item-content>
 
                             </v-list-item>
-                        <!-- Global Menu Contents -->
 
-                        <v-divider/>
+                        </v-list>
+                    <!-- Global Menu -->
 
-                        <!-- Sub Menu Title -->
+                    <v-divider/>
+
+                    <!-- Sub Menu -->
+                        <v-list>
                             <v-list-item>
                                 <v-list-item-title v-text="'Sub Menu'" />
                             </v-list-item>
-                        <!-- Sub Menu Title -->
 
-                        <!-- Sub Menu Contents -->
                             <v-list-item
                                 v-for="(item, i) in subMenuItems"
                                 :key="'submenu' + i"
@@ -64,9 +64,10 @@
                                 </v-list-item-content>
 
                             </v-list-item>
-                        <!-- Sub Menu Contents -->
 
-                    </v-list>
+                        </v-list>
+                    <!-- Sub Menu -->
+
                 </v-navigation-drawer>
             <!-- Global Menu Area -->
 
@@ -105,47 +106,79 @@
                     fixed
                 >
 
-                    <v-list>
+                    <!-- Page Menu -->
+                        <v-list>
+                            <v-list-item>Page Menu</v-list-item>
 
-                        <v-list-item>Side Menu</v-list-item>
+                            <v-list-item
+                                v-for="(item, i) in pageMenuItems"
+                                :key="'pagemenu' + i"
+                                :to="item.to"
+                                router
+                                exact
+                            >
 
-                        <v-list-item
-                            v-for="(item, i) in sideMenuItems"
-                            :key="'sidemenu' + i"
-                            :to="item.to"
-                            router
-                            exact
-                        >
-                            <v-list-item-action v-if="item.icon">
-                                <v-icon>{{ item.icon }}</v-icon>
-                            </v-list-item-action>
+                                <v-list-item-action>
+                                    <v-icon :color="item.color">{{ item.icon }}</v-icon>
+                                </v-list-item-action>
 
-                            <v-list-item-content>
-                                <v-list-item-title>
-                                    {{ !item.icon ? `${i + 1}. ` : ''}}{{ item.title }}
-                                </v-list-item-title>
-                            </v-list-item-content>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.title" />
+                                </v-list-item-content>
 
-                        </v-list-item>
+                            </v-list-item>
 
-                        <v-divider/>
+                        </v-list>
+                    <!-- Page Menu -->
 
-                        <v-list-item>Layout Menu</v-list-item>
+                    <v-divider/>
 
-                        <v-list-item
-                            v-for="(item, i) in sideLayoutItems"
-                            :key="'layoutmenu' + i"
-                            @click.stop="item.data"
-                        >
-                            <v-list-item-action>
-                                <v-icon>
-                                    {{ item.icon }}
-                                </v-icon>
-                            </v-list-item-action>
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                        </v-list-item>
+                    <!-- Side Menu -->
+                        <v-list>
+                            <v-list-item>Side Menu</v-list-item>
 
-                    </v-list>
+                            <v-list-item
+                                v-for="(item, i) in sideMenuItems"
+                                :key="'sidemenu' + i"
+                                :to="item.to"
+                                router
+                                exact
+                            >
+                                <v-list-item-action v-if="item.icon">
+                                    <v-icon>{{ item.icon }}</v-icon>
+                                </v-list-item-action>
+
+                                <v-list-item-content>
+                                    <v-list-item-title>
+                                        {{ !item.icon ? `${i + 1}. ` : ''}}{{ item.title }}
+                                    </v-list-item-title>
+                                </v-list-item-content>
+
+                            </v-list-item>
+
+                        </v-list>
+                    <!-- Side Menu -->
+                    
+                    <v-divider/>
+
+                    <!-- Layout Menu -->
+                        <v-list>
+                            <v-list-item>Layout Menu</v-list-item>
+
+                            <v-list-item
+                                v-for="(item, i) in sideLayoutItems"
+                                :key="'layoutmenu' + i"
+                                @click.stop="item.data"
+                            >
+                                <v-list-item-action>
+                                    <v-icon>
+                                        {{ item.icon }}
+                                    </v-icon>
+                                </v-list-item-action>
+                                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    <!-- Layout Menu -->
 
                 </v-navigation-drawer>
             <!-- Side Menu Area -->
@@ -171,7 +204,8 @@ const Layout = {
             fixed: false,
             menuItems: globals.menuLinks,
             sideMenuItems: [],
-            subMenuItems: [],
+            subMenuItems: "",
+            pageMenuItems: [],
             miniVariant: false,
             right: true,
             rightDrawer: false,
@@ -207,9 +241,10 @@ const Layout = {
     },
 
     created () {
-        // pagesからサイドメニューのリストを取得
+        // pagesからメニューのリストを取得
         this.$nuxt.$on('getSideMenuItems', this.setSideMenuItems)
         this.$nuxt.$on('getSubMenuItems', this.setSubMenuItems)
+        this.$nuxt.$on('getPageMenuItems', this.setPageMenuItems)
     },
 
     methods: {
@@ -220,6 +255,10 @@ const Layout = {
         setSubMenuItems (value) {
             // pagesから取得したサブメニューのリストを変数にセット
             this.subMenuItems = value
+        },
+        setPageMenuItems (value) {
+            // pagesから取得したページメニューのリストを変数にセット
+            this.pageMenuItems = value
         },
     }
 }

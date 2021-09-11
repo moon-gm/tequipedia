@@ -3,19 +3,29 @@
 
          <!-- Section Title -->
             <v-col
-                v-for="(sectionData, secIndex) in categories"
-                v-if="sectionData.id === $route.params.category"
-                :key="'sectionData' + secIndex"
+                v-for="(secData, secIdx) in categories"
+                v-if="secData.id === $route.params.category"
+                :key="'secData' + secIdx"
                 cols="12"
             >
                 <v-card>
+
                     <v-card-title class="headline">
-                        <v-icon left>{{ sectionData.icon }}</v-icon>
-                        {{ sectionData.title }} 一覧
+                        <v-icon
+                            left
+                            :color="secData.color"
+                        >
+                            {{ secData.icon }}
+                        </v-icon>
+                        {{ secData.title }} 一覧
                     </v-card-title>
+
+                    <v-divider/>
+
                     <v-card-text>
-                        {{ sectionData.note ?  sectionData.note : '左上のサブメニューから選択して下さい。'}}
+                        {{ secData.note ?  secData.note : '左上のサブメニューから選択して下さい。'}}
                     </v-card-text>
+
                 </v-card>
             </v-col>
         <!-- Section Title -->
@@ -23,25 +33,28 @@
         <!-- Section Area -->
             <v-col
                 v-if="$route.params.id"
-                v-for="(sectionData, secIndex) in mainContents"
-                :key="sectionData + secIndex"
+                v-for="(secData, secIdx) in mainContents"
+                :key="secData + secIdx"
                 cols="12"
             >
+
                 <!-- Space for Header Height -->
                     <v-spacer
-                        :id="sectionData.id"
+                        :id="secData.id"
                         :style="`margin-bottom: ${headerHeight}px;`"
                     />
                 <!-- Space for Header Height -->
 
                 <!-- Sub Section Area -->
-                    <v-card :class="sectionData.length !== secIndex && 'sub-section'">                    
+                    <v-card :class="secData.length !== secIdx && 'sub-section'">                    
 
                         <!-- Sub Section Title -->
                             <v-card-title class="title">
-                                {{ sectionData.title }}
+                                {{ secData.title }}
                             </v-card-title>
                         <!-- Sub Section Title -->
+
+                        <v-divider/>
 
                         <!-- Sub Section Contents -->
                             <v-card-text>
@@ -51,40 +64,51 @@
                                         justify="space-around"
                                         align="center"
                                     >
-                                        <v-col
-                                            v-if="sectionData.image"
-                                            v-for="(image, imageIndex) in sectionData.image"
-                                            :key="image.alt"
-                                            cols="auto"
-                                        >
-                                            <v-img
-                                                :src="image.src"
-                                                :alt="'image' + imageIndex"
-                                                max-height="auto"
-                                                max-width="300px"
-                                            />
-                                        </v-col>
-                                        <v-col
-                                            v-if="sectionData.list"
-                                            cols="auto"
-                                        >
-                                            <h3>商品詳細</h3>
-                                            <ul class="list-style">
-                                                <li
-                                                    v-for="(list, listIndex) in sectionData.list"
-                                                    :key="'list' + listIndex"
-                                                >
-                                                    {{ list }}
-                                                </li>
-                                            </ul>
-                                            <v-btn
-                                                absolute right top
-                                                target="_blank"
-                                                :href="sectionData.url"
+
+                                        <!-- Image Box -->
+                                            <v-col
+                                                v-if="secData.image"
+                                                v-for="(image, imageIdx) in secData.image"
+                                                :key="image.alt"
+                                                cols="auto"
                                             >
-                                                商品購入
-                                            </v-btn>
-                                        </v-col>
+                                                <v-img
+                                                    :src="image.src"
+                                                    :alt="'image' + imageIdx"
+                                                    max-height="auto"
+                                                    max-width="300px"
+                                                    class="image-style"
+                                                />
+                                            </v-col>
+                                        <!-- Image Box -->
+
+                                        <!-- Data Box -->
+                                            <v-col
+                                                v-if="secData.list"
+                                                cols="auto"
+                                            >
+                                                <v-card-title>Product Data</v-card-title>
+                                                <v-divider/>
+                                                <ul class="list-style">
+                                                    <li
+                                                        v-for="(list, listIdx) in secData.list"
+                                                        :key="'list' + listIdx"
+                                                    >
+                                                        <v-icon color="green">mdi-alpha-w</v-icon>
+                                                        {{ list }}
+                                                    </li>
+                                                </ul>
+                                                <v-btn
+                                                    absolute right top
+                                                    target="_blank"
+                                                    :href="secData.url"
+                                                    color="blue darken-2"
+                                                >
+                                                    商品購入
+                                                </v-btn>
+                                            </v-col>
+                                        <!-- Data Box -->
+
                                     </v-row>
                                 <!-- Products Box -->
 
@@ -93,21 +117,24 @@
 
                     </v-card>
                 <!-- Sub Section Area -->
+
             </v-col>
         <!-- Section Area -->
+
     </v-row>
 </template>
 
 <script>
-import pageData from '~/assets/data/products.json'
+import { category, mainContents } from '~/assets/data/products.json'
 
 export default {
     data () {
         return {
-            categories: pageData.category,
-            mainContents: pageData.mainContents,
-            sideMenuItems: pageData.mainContents,
+            categories: category,
+            mainContents: mainContents,
+            pageMenuItems: category,
             subMenuItems: [],
+            sideMenuItems: mainContents,
             headerHeight: 0,
         }
     },
@@ -116,130 +143,170 @@ export default {
         // Get Header Height & Scroll
         this.headerHeight = document.getElementsByClassName('getHeader')[0].clientHeight
 
-        // Get Data From Each Tables
-        {
-            const requests = [
-                { path: `/syouhin/${this.$route.params.category}/${this.$route.params.id}` },
-                { path: `/syouhin/${this.$route.params.category}/all` },
-            ]
-                
-            const getData = async (path) => {
-                await this.$axios.$get(`/server/get${path}`)
-                .then(response => {
-                    console.log({
-                        'Request': 'OK',
-                        'Path': `/server/get${path}`,
-                        'Response': response
-                    });
+        // Set Page Menu
+        this.$nuxt.$emit('getPageMenuItems', this.pageMenuItems)
 
-                    switch (path) {
-                        case `/syouhin/${this.$route.params.category}/all`: this.setSubMenuData(response); break
-                        default: this.productsDataSet(response); break
-                    }
-
-                    // Side Menu Setting
-                    this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
-                    // Sub Menu Setting
-                    this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
-                })
-                .catch(error => console.log("ERROR",error))
-            }
+        // Get Request Data
+        const requests = [
+            // Request for Main Contents & Side Menu
+            { path: `/syouhin/${this.$route.params.category}/${this.$route.params.id}` },
+            // Request for Sub Menu
+            { path: `/syouhin/${this.$route.params.category}/all` },
+        ]
+        requests.map(req => !req.path.match(/undefined/) && this.getData(req))
             
-            requests.map(req => !req.path.match(/undefined/) && getData(req.path))
-            
-        }
-
     },
 
     methods: {
-        // Products Data Table Setting
-        productsDataSet(dataSet) {
-            const category = this.$route.params.category
-            const id = this.$route.params.id
+
+        // Get Request Data
+        async getData(req) {
+            const reqPath = `/server/get${req.path}`
+            await this.$axios.$get(reqPath)
+            .then(response => {
+                console.log({'Path': reqPath, 'Response': response})
+
+                switch (req.path) {
+                    case `/syouhin/${this.$route.params.category}/all`:
+                        this.setSubMenuData(response)
+                        // Sub Menu Setting
+                        this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
+                    break
+                    default:
+                        this.setProductsData(response)
+                        // Side Menu Setting
+                        this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
+                    break
+                }
+
+            })
+            .catch(error => console.log('ERROR', error))
+        },
+
+        // Set Response Data for MainContents & Side Menu
+        setProductsData(response) {
+
+            // Set MainContents & Side Menu
             this.mainContents = []
             this.sideMenuItems = []
-            dataSet.map(data => {
+            response.map(data => {
                 const insertData = {
-                    "id": data.aging_id,
-                    "title": `${data.brand_name} / ${data.aging_name}`,
-                    "to": `/products/${category}/${id}#${data.aging_id}`,
-                    "image": [
+                    id: data.aging_id,
+                    title: `${data.brand_name} / ${data.aging_name}`,
+                    to: `/products/${this.$route.params.category}/${this.$route.params.id}#${data.aging_id}`,
+                    image: [
                         {
-                            "src": `/images/products/${data.image}`,
-                            "alt": data.syouhin_id,
+                            src: `/images/products/${data.image}`,
+                            alt: data.syouhin_id,
                         }
                     ],
-                    "list": [
-                        `度数：${data.alc_degree}`,
-                        `混合度：${data.mix_degree}`,
-                        `蒸留所：${data.dest_name_kana}`,
-                        `Nom：${data.dest_nom}`,
-                        `参考価格：${data.min_price}円～`,
-                        `生産地域：${data.local_name_kana}${data.area_name_kana}`,
-                        `情報：${data.information}`,
-                        `香り：${data.review_flavor}`,
-                        `味：${data.review_top}`,
-                        `余韻：${data.review_after}`,
+                    list: [
+                        `アルコール　＿＿＿＿　${data.alc_degree}`,
+                        `アガベ使用　＿＿＿＿　${data.mix_degree === 'Mixed' ? 'ミクスト（51%以上）' : data.mix_degree === 'Liquor' ? 'リキュール（51%未満 / 添加物1%以上）' : data.mix_degree}`,
+                        `蒸留所名称　＿＿＿＿　${data.dest_name_kana}`,
+                        `蒸留所番号　＿＿＿＿　NOM ${data.dest_nom}`,
+                        `参考価格帯　＿＿＿＿　${data.min_price}円 ～`,
+                        `生産州地域　＿＿＿＿　${data.local_name_kana} ${data.area_name_kana}`,
+                        `商品の情報　＿＿＿＿　${data.information}`,
+                        `薫香・風味　＿＿＿＿　${data.review_flavor}`,
+                        `トップ・味　＿＿＿＿　${data.review_top}`,
+                        `余韻・後味　＿＿＿＿　${data.review_after}`,
                     ],
-                    "url": data.syouhin_url
+                    url: data.syouhin_url
                 }
                 this.mainContents.push(insertData)
                 this.sideMenuItems.push(insertData)
             })
-            const agingsReplace = (
-                dataSet[0].aging_sort === 'blanco' ? 'ブランコ'
-                :
-                dataSet[0].aging_sort === 'gold' ? 'ゴールド'
-                :
-                dataSet[0].aging_sort === 'reposado' ? 'レポサド'
-                :
-                dataSet[0].aging_sort === 'anejo' ? 'アネホ'
-                :
-                dataSet[0].aging_sort === 'extraanejo' ? 'エクストラアネホ'
-                :
-                dataSet[0].aging_sort === 'joven' ? 'ホベン'
-                :
-                dataSet[0].aging_sort === 'others' ? 'その他'
-                :
-                dataSet[0].aging_sort === 'cocktail' ? 'カクテル'
-                :
-                dataSet[0].aging_sort === 'mezcal' ? 'メスカル'
-                :　''
-            )
-            const cond = (
-                category === 'brands' ? [dataSet[0].brand_name, pageData.category[0].icon]
-                :
-                category === 'destiladors' ? [`Nom ${dataSet[0].dest_nom} ${dataSet[0].dest_name_kana}`, pageData.category[1].icon]
-                :
-                category === 'agings' ? [agingsReplace, pageData.category[3].icon]
-                : ''
-            )
-            this.categories = [
-                {
-                    id: category,
-                    title: cond[0],
-                    icon: cond[1],
-                    note: "右上のサイドメニューからページ内ジャンプ、左上サブメニューから他のページにリンクできます。"
-                }
-            ]
+
+            // Set Section Category
+            let categoryIdx = Number()
+            const noteMessage = '右上のサイドメニューからページ内ジャンプ、左上サブメニューから他のページにリンクできます。'
+            switch (this.$route.params.category) {
+                case 'brands':
+                    categoryIdx = 0
+                    this.categories = [
+                        {
+                            id: this.$route.params.category,
+                            title: response[0].brand_name,
+                            icon: category[categoryIdx].icon,
+                            color: category[categoryIdx].color,
+                            note: noteMessage
+                        }
+                    ]
+                break
+                case 'destiladors':
+                    categoryIdx = 1
+                    this.categories = [
+                        {
+                            id: this.$route.params.category,
+                            title: `NOM ${response[0].dest_nom} ${response[0].dest_name_kana}`,
+                            icon: category[categoryIdx].icon,
+                            color: category[categoryIdx].color,
+                            note: noteMessage
+                        }
+                    ]
+                break
+                case 'agings':
+                    categoryIdx = 3
+                    let agingsSort = String()
+                    switch (response[0].aging_sort) {
+                        case 'blanco': agingsSort = 'ブランコ'; break
+                        case 'gold': agingsSort = 'ゴールド'; break
+                        case 'reposado': agingsSort = 'レポサド'; break
+                        case 'anejo': agingsSort = 'アネホ'; break
+                        case 'extraanejo': agingsSort = 'エクストラアネホ'; break
+                        case 'joven': agingsSort = 'ホベン'; break
+                        case 'others': agingsSort = 'その他'; break
+                        case 'cocktail': agingsSort = 'カクテル'; break
+                        case 'mezcal': agingsSort = 'メスカル'; break
+                    }
+                    this.categories = [
+                        {
+                            id: this.$route.params.category,
+                            title: agingsSort,
+                            icon: category[categoryIdx].icon,
+                            color: category[categoryIdx].color,
+                            note: noteMessage
+                        }
+                    ]
+                break
+            }
         },
-        // Products Side Menu List Setting Data
-        setSubMenuData(dataSet) {
+
+        // Set Response Data for Sub Menu
+        setSubMenuData(response) {
             this.subMenuItems = []
-            const category = this.$route.params.category
-            dataSet.map(data => {
-                const cond = (
-                    category === 'brands' ? [data.name, data.id, pageData.category[0].icon]
-                    :
-                    category === 'destiladors' ? [`Nom ${data.nom}`, data.nom, pageData.category[1].icon]
-                    :
-                    category === 'agings' ? [data.name_kana, data.id, pageData.category[3].icon]
-                    : ''
-                )
-                const insertData = {
-                    "title": cond[0],
-                    "to": `/products/${category}/${cond[1]}`,
-                    "icon": cond[2]
+            response.map(data => {
+                let insertData = {}
+                let categoryIdx = Number()
+                switch (this.$route.params.category) {
+                    case 'brands':
+                        categoryIdx = 0
+                        insertData = {
+                            title: data.name,
+                            to: `/products/${this.$route.params.category}/${data.id}`,
+                            icon: category[categoryIdx].icon ,
+                            color: category[categoryIdx].color
+                        }
+                    break
+                    case 'destiladors':
+                        categoryIdx = 1
+                        insertData = {
+                            title: `NOM ${data.nom}`,
+                            to: `/products/${this.$route.params.category}/${data.nom}`,
+                            icon: category[categoryIdx].icon ,
+                            color: category[categoryIdx].color
+                        }
+                    break
+                    case 'agings':
+                        categoryIdx = 3
+                        insertData = {
+                            title: data.name_kana,
+                            to: `/products/${this.$route.params.category}/${data.id}`,
+                            icon: category[categoryIdx].icon ,
+                            color: category[categoryIdx].color
+                        }
+                    break
                 }
                 this.subMenuItems.push(insertData)
             })
@@ -248,12 +315,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .list-style {
         padding: 20px;
+        list-style-type: none;
     }
     .paragraph-style {
         padding-left: 1em;
         padding-bottom: 20px;
+    }
+    .image-style {
+        border-radius: 8px;
     }
 </style>
