@@ -19,7 +19,7 @@
                             </v-list-item>
 
                             <v-list-item
-                                v-for="(item, i) in menuItems"
+                                v-for="(item, i) in globalMenuItems"
                                 :key="'globalmenu' + i"
                                 :to="item.to"
                                 router
@@ -45,11 +45,17 @@
                         <v-list>
                             <v-list-item>
                                 <v-list-item-title v-text="'Sub Menu'" />
+                                <v-btn icon @click="subMenu = !subMenu">
+                                    <v-icon>
+                                        {{ subMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
+                                    </v-icon>
+                                </v-btn>
                             </v-list-item>
 
                             <v-list-item
+                                v-if="subMenu"
                                 v-for="(item, i) in subMenuItems"
-                                :key="'submenu' + i"
+                                :key="'subMenu' + i"
                                 :to="item.to"
                                 router
                                 exact
@@ -112,9 +118,17 @@
 
                     <!-- Page Menu -->
                         <v-list>
-                            <v-list-item>Page Menu</v-list-item>
+                            <v-list-item>
+                                <v-list-item-title v-text="'Page Menu'" />
+                                <v-btn icon @click="pageMenu = !pageMenu">
+                                    <v-icon>
+                                        {{ pageMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
+                                    </v-icon>
+                                </v-btn>
+                            </v-list-item>
 
                             <v-list-item
+                                v-if="pageMenu"
                                 v-for="(item, i) in pageMenuItems"
                                 :key="'pagemenu' + i"
                                 :to="item.to"
@@ -139,9 +153,17 @@
 
                     <!-- Side Menu -->
                         <v-list>
-                            <v-list-item>Side Menu</v-list-item>
+                            <v-list-item>
+                                <v-list-item-title v-text="'Side Menu'" />
+                                <v-btn icon @click="sideMenu = !sideMenu">
+                                    <v-icon>
+                                        {{ sideMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
+                                    </v-icon>
+                                </v-btn>
+                            </v-list-item>
 
                             <v-list-item
+                                v-if="sideMenu"
                                 v-for="(item, i) in sideMenuItems"
                                 :key="'sidemenu' + i"
                                 :to="item.to"
@@ -198,18 +220,26 @@
 </template>
 
 <script>
-import globals from '../assets/data/globals.json'
+import { menuLinks } from '../assets/data/globals.json'
 
 const Layout = {
     data () {
         return {
+            // Global Menu
+            globalMenuItems: menuLinks,
+            // Side Menu
+            sideMenuItems: [],
+            sideMenu: true,
+            // Sub Menu
+            subMenuItems: [],
+            subMenu: true,
+            // Page Menu
+            pageMenuItems: [],
+            pageMenu: true,
+            // Layout Menu
             clipped: true,
             drawer: false,
             fixed: false,
-            menuItems: globals.menuLinks,
-            sideMenuItems: [],
-            subMenuItems: "",
-            pageMenuItems: [],
             miniVariant: false,
             right: true,
             rightDrawer: false,
