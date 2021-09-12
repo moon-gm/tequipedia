@@ -2,7 +2,7 @@
     <v-row justify="center" align="start">
         <!-- Section Area -->
             <v-col
-                v-for="(secData, secIdx) in pageMenuItems"
+                v-for="(secData, secIdx) in categoryMenuLists"
                 :key="secData + secIdx"
                 cols="10" sm="8" md="6"
             >
@@ -45,19 +45,19 @@ import { category } from '~/assets/data/products.json'
 export default {
     data () {
         return {
-            pageMenuItems: category,
-            subMenuItems: [],
-            sideMenuItems: [],
+            categoryMenuLists: category,
+            subMenuLists: [],
+            pageMenuLists: [],
         }
     },
 
     mounted () {
-        // Set Page Menu
-        this.$nuxt.$emit('getPageMenuItems', this.pageMenuItems)
+        // Set Category Menu
+        this.$nuxt.$emit('getPageMenuItems', this.categoryMenuLists)
         // Set Sub Menu
-        this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
-        // Set Side Menu
-        this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
+        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+        // Set Page Menu
+        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
     }
 }
 </script>

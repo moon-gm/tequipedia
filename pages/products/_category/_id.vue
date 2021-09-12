@@ -29,12 +29,12 @@
 
                     <v-card-text>
                         <v-alert
-                            color="blue"
+                            color="grey darken-3"
                             border="left"
                             type="info"
                             dismissible
                         >
-                            {{ secData.note1 ?  secData.note1 : 'Click a Sub Menu list in your left'}}<br>
+                            {{ secData.note1 ?  secData.note1 : 'Click a Sub Menu list in your right'}}<br>
                             {{ secData.note2 ?  secData.note2 : ''}}
                         </v-alert>
                     </v-card-text>
@@ -149,9 +149,9 @@ export default {
             pageIdx: Number(),
             mainContents: mainContents,
             breadcrumbs: [],
-            pageMenuItems: category,
-            subMenuItems: [],
-            sideMenuItems: mainContents,
+            categoryMenuLists: category,
+            subMenuLists: [],
+            pageMenuLists: mainContents,
             headerHeight: 0,
         }
     },
@@ -160,8 +160,8 @@ export default {
         // Get Header Height & Scroll
         this.headerHeight = document.getElementsByClassName('getHeader')[0].clientHeight
 
-        // Set Page Menu
-        this.$nuxt.$emit('getPageMenuItems', this.pageMenuItems)
+        // Set Category Menu
+        this.$nuxt.$emit('getPageMenuItems', this.categoryMenuLists)
 
         // Get Page Index
         menuLinks.map((pageInfo, idx) => {
@@ -175,7 +175,7 @@ export default {
 
         // Get Request Data
         const requests = [
-            // Request for Main Contents & Side Menu & Section Category & Breadcrumbs
+            // Request for Main Contents & Page Menu & Section Category & Breadcrumbs
             { path: `/syouhin/${this.$route.params.category}/${this.$route.params.id}` },
             // Request for Sub Menu
             { path: `/syouhin/${this.$route.params.category}/all` },
@@ -197,12 +197,12 @@ export default {
                     case `/syouhin/${this.$route.params.category}/all`:
                         // Set Sub Menu
                         this.setSubMenuData(response)
-                        this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
+                        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
                     break
                     default:
-                        // Set Main Contents & Side Menu & Section Category
+                        // Set Main Contents & Page Menu & Section Category
                         this.setProductsData(response)
-                        this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
+                        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
                         // Set Breadcrumbs
                         this.setBreadcrumbs(response)
                     break
@@ -212,17 +212,18 @@ export default {
             .catch(error => console.log('ERROR', error))
         },
 
-        // Set Response Data for MainContents & Side Menu
+        // Set Response Data for MainContents & Page Menu
         setProductsData(response) {
 
-            // Set MainContents & Side Menu
+            // Set MainContents & Page Menu
             this.mainContents = []
-            this.sideMenuItems = []
+            this.pageMenuLists = []
             response.map(data => {
-                const insertData = {
+
+                // Set MainContents
+                const insertData1 = {
                     id: `${data.brand_id}_${data.aging_id}`,
                     title: `${data.brand_name} / ${data.aging_name}`,
-                    to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${this.$route.params.id}#${data.brand_id}_${data.aging_id}`,
                     image: [
                         {
                             src: `/images/products/${data.image}`,
@@ -243,8 +244,15 @@ export default {
                     ],
                     url: data.syouhin_url,
                 }
-                this.mainContents.push(insertData)
-                this.sideMenuItems.push(insertData)
+                this.mainContents.push(insertData1)
+
+                // Set Page Menu
+                const insertData2 = {
+                    title: data.brand_name,
+                    subtitle: data.aging_name,
+                    to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${this.$route.params.id}#${data.brand_id}_${data.aging_id}`,
+                }
+                this.pageMenuLists.push(insertData2)
             })
 
             // Set Section Category
@@ -268,15 +276,15 @@ export default {
                     id: this.$route.params.category,
                     icon: category[this.categoryIdx].icon,
                     color: category[this.categoryIdx].color,
-                    note1: 'Click a Side Menu list in your right and Jump to in this page.',
-                    note2: 'Click a Sub Menu list in your left and Link to in this Category.',
+                    note1: 'Click a Page Menu list in your right and Jump to in this page.',
+                    note2: 'Click a Sub Menu list in your right and Link to in this Category.',
                 }, insertData)
             ]
         },
 
         // Set Response Data for Sub Menu
         setSubMenuData(response) {
-            this.subMenuItems = []
+            this.subMenuLists = []
             response.map(data => {
                 let insertData = {}
                 switch (this.$route.params.category) {
@@ -315,11 +323,11 @@ export default {
                         }
                     break
                 }
-                const subMenuItem = Object.assign({
+                const subMenuList = Object.assign({
                     icon: category[this.categoryIdx].icon,
                     color: category[this.categoryIdx].color,
                 }, insertData)
-                this.subMenuItems.push(subMenuItem)
+                this.subMenuLists.push(subMenuList)
             })
         },
 

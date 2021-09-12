@@ -78,16 +78,16 @@ export default {
         return {
             mainContents: mainContents,
             pageInfo: menuLinks[pageIdx],
-            subMenuItems: [],
-            sideMenuItems: [],
+            subMenuLists: [],
+            pageMenuLists: [],
         }
     },
 
     mounted () {
         // Set Sub Menu
-        this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
-        // Set Side Menu
-        this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
+        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+        // Set Page Menu
+        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
     }
 
 }

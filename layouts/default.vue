@@ -41,21 +41,21 @@
 
                     <v-divider/>
 
-                    <!-- Sub Menu -->
+                    <!-- Category Menu -->
                         <v-list>
                             <v-list-item>
-                                <v-list-item-title v-text="'Sub Menu'" />
-                                <v-btn icon @click="subMenu = !subMenu">
+                                <v-list-item-title v-text="'Category Menu'" />
+                                <v-btn icon @click="categoryMenu = !categoryMenu">
                                     <v-icon>
-                                        {{ subMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
+                                        {{ categoryMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
                                     </v-icon>
                                 </v-btn>
                             </v-list-item>
 
                             <v-list-item
-                                v-if="subMenu"
-                                v-for="(item, i) in subMenuItems"
-                                :key="'subMenu' + i"
+                                v-if="categoryMenu"
+                                v-for="(item, i) in categoryMenuLists"
+                                :key="'categoryMenu' + i"
                                 :to="item.to"
                                 router
                                 exact
@@ -67,16 +67,12 @@
 
                                 <v-list-item-content>
                                     <v-list-item-title v-text="item.title" />
-                                    <v-list-item-subtitle
-                                        v-if="item.subtitle"
-                                        v-text="item.subtitle"
-                                    />
                                 </v-list-item-content>
 
                             </v-list-item>
 
                         </v-list>
-                    <!-- Sub Menu -->
+                    <!-- Category Menu -->
 
                 </v-navigation-drawer>
             <!-- Global Menu Area -->
@@ -129,8 +125,48 @@
 
                             <v-list-item
                                 v-if="pageMenu"
-                                v-for="(item, i) in pageMenuItems"
-                                :key="'pagemenu' + i"
+                                v-for="(item, i) in pageMenuLists"
+                                :key="'pageMenu' + i"
+                                :to="item.to"
+                                router
+                                exact
+                            >
+                                <v-list-item-action>
+                                    <v-icon color="purple">mdi-bookmark-outline</v-icon>
+                                </v-list-item-action>
+
+                                <v-list-item-content>
+                                    <v-list-item-title>
+                                        {{ i + 1 }}. {{ item.title }}
+                                    </v-list-item-title>
+                                    <v-list-item-subtitle
+                                        v-if="item.subtitle"
+                                        v-text="item.subtitle"
+                                    />
+                                </v-list-item-content>
+
+                            </v-list-item>
+
+                        </v-list>
+                    <!-- Page Menu -->
+
+                    <v-divider/>
+                    
+                    <!-- Sub Menu -->
+                        <v-list>
+                            <v-list-item>
+                                <v-list-item-title v-text="'Sub Menu'" />
+                                <v-btn icon @click="subMenu = !subMenu">
+                                    <v-icon>
+                                        {{ subMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
+                                    </v-icon>
+                                </v-btn>
+                            </v-list-item>
+
+                            <v-list-item
+                                v-if="subMenu"
+                                v-for="(item, i) in subMenuLists"
+                                :key="'subMenu' + i"
                                 :to="item.to"
                                 router
                                 exact
@@ -142,48 +178,16 @@
 
                                 <v-list-item-content>
                                     <v-list-item-title v-text="item.title" />
+                                    <v-list-item-subtitle
+                                        v-if="item.subtitle"
+                                        v-text="item.subtitle"
+                                    />
                                 </v-list-item-content>
 
                             </v-list-item>
 
                         </v-list>
-                    <!-- Page Menu -->
-
-                    <v-divider/>
-
-                    <!-- Side Menu -->
-                        <v-list>
-                            <v-list-item>
-                                <v-list-item-title v-text="'Side Menu'" />
-                                <v-btn icon @click="sideMenu = !sideMenu">
-                                    <v-icon>
-                                        {{ sideMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'}}
-                                    </v-icon>
-                                </v-btn>
-                            </v-list-item>
-
-                            <v-list-item
-                                v-if="sideMenu"
-                                v-for="(item, i) in sideMenuItems"
-                                :key="'sidemenu' + i"
-                                :to="item.to"
-                                router
-                                exact
-                            >
-                                <v-list-item-action v-if="item.icon">
-                                    <v-icon>{{ item.icon }}</v-icon>
-                                </v-list-item-action>
-
-                                <v-list-item-content>
-                                    <v-list-item-title>
-                                        {{ !item.icon ? `${i + 1}. ` : ''}}{{ item.title }}
-                                    </v-list-item-title>
-                                </v-list-item-content>
-
-                            </v-list-item>
-
-                        </v-list>
-                    <!-- Side Menu -->
+                    <!-- Sub Menu -->
                     
                     <v-divider/>
 
@@ -227,15 +231,15 @@ const Layout = {
         return {
             // Global Menu
             globalMenuItems: menuLinks,
-            // Side Menu
-            sideMenuItems: [],
-            sideMenu: true,
-            // Sub Menu
-            subMenuItems: [],
-            subMenu: true,
+            // Category Menu
+            categoryMenuLists: [],
+            categoryMenu: true,
             // Page Menu
-            pageMenuItems: [],
+            pageMenuLists: [],
             pageMenu: true,
+            // Sub Menu
+            subMenuLists: [],
+            subMenu: true,
             // Layout Menu
             clipped: true,
             drawer: false,
@@ -284,15 +288,15 @@ const Layout = {
     methods: {
         setSideMenuItems (value) {
             // pagesから取得したサイドメニューのリストを変数にセット
-            this.sideMenuItems = value
+            this.pageMenuLists = value
         },
         setSubMenuItems (value) {
             // pagesから取得したサブメニューのリストを変数にセット
-            this.subMenuItems = value
+            this.subMenuLists = value
         },
         setPageMenuItems (value) {
             // pagesから取得したページメニューのリストを変数にセット
-            this.pageMenuItems = value
+            this.categoryMenuLists = value
         },
     }
 }

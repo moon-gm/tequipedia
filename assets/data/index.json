@@ -214,7 +214,7 @@
                             {"text": "地区", "value": "area"}
                         ],
                         "perPage": 15,
-                        "groupBy": "local",
+                        "groupBy": [],
                         "items": []
                     }
                 }

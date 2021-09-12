@@ -132,10 +132,10 @@ menuLinks.map((pageInfo, idx) => {
     if(pageInfo.to === '/') pageIdx = idx
 })
 
-// Get Side Menu
-const sideMenuItems = []
+// Get Page Menu
+const pageMenuLists = []
 mainContents.map((item) => {
-    sideMenuItems.push({
+    pageMenuLists.push({
         title: item.title,
         to: `/#${item.id}`
     })
@@ -146,8 +146,8 @@ export default {
         return {
             mainContents: mainContents,
             pageInfo: menuLinks[pageIdx],
-            subMenuItems: [],
-            sideMenuItems: sideMenuItems,
+            subMenuLists: [],
+            pageMenuLists: pageMenuLists,
             headerHeight: 0,
         }
     },
@@ -155,9 +155,9 @@ export default {
     mounted () {
 
         // Set Sub Menu
-        this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
-        // Set Side Menu
-        this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
+        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+        // Set Page Menu
+        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
 
         // Get Header Height & Scroll Setting
         this.headerHeight = document.getElementsByClassName('getHeader')[0].clientHeight
