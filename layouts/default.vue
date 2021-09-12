@@ -61,6 +61,10 @@
 
                                 <v-list-item-content>
                                     <v-list-item-title v-text="item.title" />
+                                    <v-list-item-subtitle
+                                        v-if="item.subtitle"
+                                        v-text="item.subtitle"
+                                    />
                                 </v-list-item-content>
 
                             </v-list-item>

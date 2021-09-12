@@ -28,7 +28,15 @@
                     />
 
                     <v-card-text>
-                        {{ secData.note ?  secData.note : '左上のサブメニューから選択して下さい。'}}
+                        <v-alert
+                            color="blue"
+                            border="left"
+                            type="info"
+                            dismissible
+                        >
+                            {{ secData.note1 ?  secData.note1 : 'Click a Sub Menu list in your left'}}<br>
+                            {{ secData.note2 ?  secData.note2 : ''}}
+                        </v-alert>
                     </v-card-text>
 
                 </v-card>
@@ -251,13 +259,17 @@ export default {
                 case 'agings':
                     insertData = { title: this.getAgingName(response[0].aging_sort) }
                 break
+                case 'areas':
+                    insertData = { title: `${response[0].local_name_kana} ${response[0].area_name_kana}` }
+                break
             }
             this.categories = [
                 Object.assign({
                     id: this.$route.params.category,
                     icon: category[this.categoryIdx].icon,
                     color: category[this.categoryIdx].color,
-                    note: '右上のサイドメニューからページ内ジャンプ、左上サブメニューから他のページにリンクできます。'
+                    note1: 'Click a Side Menu list in your right and Jump to in this page.',
+                    note2: 'Click a Sub Menu list in your left and Link to in this Category.',
                 }, insertData)
             ]
         },
@@ -276,13 +288,29 @@ export default {
                     break
                     case 'destiladors':
                         insertData = {
-                            title: `NOM ${data.nom} ${data.name_kana}`,
+                            title: `NOM ${data.nom}`,
+                            subtitle: `${data.name_kana}`,
                             to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${data.nom}`,
                         }
                     break
                     case 'agings':
                         insertData = {
                             title: data.name_kana,
+                            subtitle: data.description,
+                            to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${data.id}`,
+                        }
+                    break
+                    case 'areas':
+                        let local_name = String()
+                        switch (data.local_id) {
+                            case 'valles': local_name = 'バジェス / ハリスコ'; break
+                            case 'altos': local_name = 'ロスアルトス / ハリスコ'; break
+                            case 'centro': local_name = 'ソナ・セントロ / ハリスコ'; break
+                            case 'others': local_name = 'ハリスコ州外'; break
+                        }
+                        insertData = {
+                            title: `${data.name_kana}`,
+                            subtitle: `@${local_name}`,
                             to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${data.id}`,
                         }
                     break
@@ -308,15 +336,20 @@ export default {
                     case 'agings':
                         return data.aging_sort === this.$route.params.id ? this.getAgingName(data.aging_sort) : '';
                     break
+                    case 'areas':
+                        return data.area_id === this.$route.params.id ? `${data.local_name_kana} ${data.area_name_kana}` : '';
+                    break
                 }
             })
-            category.map(data => {
+            let currentData = {}
+            category.map((data, idx) => {
                 const insertData = {
-                    text: `${data.title} 商品一覧${data.id === this.$route.params.category ? `　＞　${pageName[0]}` : ''}`,
+                    text: `${data.title} 一覧${data.id === this.$route.params.category ? `　＞　${pageName[0]}` : ''}`,
                     disabled: data.id === this.$route.params.category ? true : false,
-                    href: `${menuLinks[this.pageIdx].to}/${data.id}/`,
+                    href: data.to,
                 }
-                this.breadcrumbs.push(insertData)
+                this.categoryIdx === idx ? currentData = insertData : this.breadcrumbs.push(insertData)
+                category.length === idx + 1 && this.breadcrumbs.push(currentData)
             })
         },
 

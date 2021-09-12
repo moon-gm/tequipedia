@@ -17,12 +17,12 @@
             "to": "/products/destiladors/1102"
         },
         {
-            "id": "area", 
+            "id": "areas", 
             "title": "生産地方別",
             "color": "amber",
             "icon": "mdi-earth",
             "description": "生産地方ごとに商品を紹介します。生産される州・地方・地区によっても大まかにクセが異なるので、地域の特徴を知りたい方はこちらから",
-            "to": "/products/area"
+            "to": "/products/areas/tequila"
         },
         {
             "id": "agings",

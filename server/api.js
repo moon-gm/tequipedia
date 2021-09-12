@@ -58,6 +58,8 @@ const  sql_selectProductCategory = (category_id, id) => {
         :
         category_id === 'agings' ? 'aging_sort'
         :
+        category_id === 'areas' ? 'area_id'
+        :
         ''
     )
     return `SELECT * FROM syouhin WHERE ${column_name} = '${id}'`
@@ -89,7 +91,9 @@ app.get('/get/:table/:category/:id', (req, res) => {
         :
         req.params.category === 'destiladors' ? ['name_kana', 'nom']
         :
-        req.params.category === 'agings' ? ['name_kana', 'id']
+        req.params.category === 'agings' ? ['name_kana', 'id', 'description']
+        :
+        req.params.category === 'areas' ? ['name_kana', 'id', 'local_id']
         : ''
     )
 
