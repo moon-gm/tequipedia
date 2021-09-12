@@ -8,7 +8,7 @@
                 :key="'secData' + secIdx"
                 cols="12"
             >
-                <v-card>
+                <v-card color="rgba(0, 0, 0, 0)" elevation="0">
 
                     <v-card-title class="headline">
                         <v-icon
@@ -21,6 +21,11 @@
                     </v-card-title>
 
                     <v-divider/>
+
+                     <v-breadcrumbs
+                        :items="breadcrumbs"
+                        divider="/"
+                    />
 
                     <v-card-text>
                         {{ secData.note ?  secData.note : '左上のサブメニューから選択して下さい。'}}
@@ -126,12 +131,16 @@
 
 <script>
 import { category, mainContents } from '~/assets/data/products.json'
+import { menuLinks } from '~/assets/data/globals.json'
 
 export default {
     data () {
         return {
             categories: category,
+            categoryIdx: Number(),
+            pageIdx: Number(),
             mainContents: mainContents,
+            breadcrumbs: [],
             pageMenuItems: category,
             subMenuItems: [],
             sideMenuItems: mainContents,
@@ -146,9 +155,19 @@ export default {
         // Set Page Menu
         this.$nuxt.$emit('getPageMenuItems', this.pageMenuItems)
 
+        // Get Page Index
+        menuLinks.map((pageInfo, idx) => {
+            if(pageInfo.to === '/products') this.pageIdx = idx
+        })
+
+        // Get Category Index
+        category.map((categoryInfo, idx) => {
+            if(categoryInfo.id === this.$route.params.category) this.categoryIdx = idx
+        })
+
         // Get Request Data
         const requests = [
-            // Request for Main Contents & Side Menu
+            // Request for Main Contents & Side Menu & Section Category & Breadcrumbs
             { path: `/syouhin/${this.$route.params.category}/${this.$route.params.id}` },
             // Request for Sub Menu
             { path: `/syouhin/${this.$route.params.category}/all` },
@@ -168,14 +187,16 @@ export default {
 
                 switch (req.path) {
                     case `/syouhin/${this.$route.params.category}/all`:
+                        // Set Sub Menu
                         this.setSubMenuData(response)
-                        // Sub Menu Setting
                         this.$nuxt.$emit('getSubMenuItems', this.subMenuItems)
                     break
                     default:
+                        // Set Main Contents & Side Menu & Section Category
                         this.setProductsData(response)
-                        // Side Menu Setting
                         this.$nuxt.$emit('getSideMenuItems', this.sideMenuItems)
+                        // Set Breadcrumbs
+                        this.setBreadcrumbs(response)
                     break
                 }
 
@@ -191,9 +212,9 @@ export default {
             this.sideMenuItems = []
             response.map(data => {
                 const insertData = {
-                    id: data.aging_id,
+                    id: `${data.brand_id}_${data.aging_id}`,
                     title: `${data.brand_name} / ${data.aging_name}`,
-                    to: `/products/${this.$route.params.category}/${this.$route.params.id}#${data.aging_id}`,
+                    to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${this.$route.params.id}#${data.brand_id}_${data.aging_id}`,
                     image: [
                         {
                             src: `/images/products/${data.image}`,
@@ -212,65 +233,33 @@ export default {
                         `トップ・味　＿＿＿＿　${data.review_top}`,
                         `余韻・後味　＿＿＿＿　${data.review_after}`,
                     ],
-                    url: data.syouhin_url
+                    url: data.syouhin_url,
                 }
                 this.mainContents.push(insertData)
                 this.sideMenuItems.push(insertData)
             })
 
             // Set Section Category
-            let categoryIdx = Number()
-            const noteMessage = '右上のサイドメニューからページ内ジャンプ、左上サブメニューから他のページにリンクできます。'
+            let insertData = {}
             switch (this.$route.params.category) {
                 case 'brands':
-                    categoryIdx = 0
-                    this.categories = [
-                        {
-                            id: this.$route.params.category,
-                            title: response[0].brand_name,
-                            icon: category[categoryIdx].icon,
-                            color: category[categoryIdx].color,
-                            note: noteMessage
-                        }
-                    ]
+                    insertData = { title: response[0].brand_name }
                 break
                 case 'destiladors':
-                    categoryIdx = 1
-                    this.categories = [
-                        {
-                            id: this.$route.params.category,
-                            title: `NOM ${response[0].dest_nom} ${response[0].dest_name_kana}`,
-                            icon: category[categoryIdx].icon,
-                            color: category[categoryIdx].color,
-                            note: noteMessage
-                        }
-                    ]
+                    insertData = { title: `NOM ${response[0].dest_nom} ${response[0].dest_name_kana}` }
                 break
                 case 'agings':
-                    categoryIdx = 3
-                    let agingsSort = String()
-                    switch (response[0].aging_sort) {
-                        case 'blanco': agingsSort = 'ブランコ'; break
-                        case 'gold': agingsSort = 'ゴールド'; break
-                        case 'reposado': agingsSort = 'レポサド'; break
-                        case 'anejo': agingsSort = 'アネホ'; break
-                        case 'extraanejo': agingsSort = 'エクストラアネホ'; break
-                        case 'joven': agingsSort = 'ホベン'; break
-                        case 'others': agingsSort = 'その他'; break
-                        case 'cocktail': agingsSort = 'カクテル'; break
-                        case 'mezcal': agingsSort = 'メスカル'; break
-                    }
-                    this.categories = [
-                        {
-                            id: this.$route.params.category,
-                            title: agingsSort,
-                            icon: category[categoryIdx].icon,
-                            color: category[categoryIdx].color,
-                            note: noteMessage
-                        }
-                    ]
+                    insertData = { title: this.getAgingName(response[0].aging_sort) }
                 break
             }
+            this.categories = [
+                Object.assign({
+                    id: this.$route.params.category,
+                    icon: category[this.categoryIdx].icon,
+                    color: category[this.categoryIdx].color,
+                    note: '右上のサイドメニューからページ内ジャンプ、左上サブメニューから他のページにリンクできます。'
+                }, insertData)
+            ]
         },
 
         // Set Response Data for Sub Menu
@@ -278,39 +267,75 @@ export default {
             this.subMenuItems = []
             response.map(data => {
                 let insertData = {}
-                let categoryIdx = Number()
                 switch (this.$route.params.category) {
                     case 'brands':
-                        categoryIdx = 0
                         insertData = {
                             title: data.name,
-                            to: `/products/${this.$route.params.category}/${data.id}`,
-                            icon: category[categoryIdx].icon ,
-                            color: category[categoryIdx].color
+                            to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${data.id}`,
                         }
                     break
                     case 'destiladors':
-                        categoryIdx = 1
                         insertData = {
-                            title: `NOM ${data.nom}`,
-                            to: `/products/${this.$route.params.category}/${data.nom}`,
-                            icon: category[categoryIdx].icon ,
-                            color: category[categoryIdx].color
+                            title: `NOM ${data.nom} ${data.name_kana}`,
+                            to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${data.nom}`,
                         }
                     break
                     case 'agings':
-                        categoryIdx = 3
                         insertData = {
                             title: data.name_kana,
-                            to: `/products/${this.$route.params.category}/${data.id}`,
-                            icon: category[categoryIdx].icon ,
-                            color: category[categoryIdx].color
+                            to: `${menuLinks[this.pageIdx].to}/${this.$route.params.category}/${data.id}`,
                         }
                     break
                 }
-                this.subMenuItems.push(insertData)
+                const subMenuItem = Object.assign({
+                    icon: category[this.categoryIdx].icon,
+                    color: category[this.categoryIdx].color,
+                }, insertData)
+                this.subMenuItems.push(subMenuItem)
             })
         },
+
+        // Set Breadcrumbs
+        setBreadcrumbs(response) {
+            const pageName = response.map(data => {
+                switch (this.$route.params.category) {
+                    case 'brands':
+                        return data.brand_id === this.$route.params.id ? data.brand_name : ''
+                    break
+                    case 'destiladors':
+                        return data.dest_nom === this.$route.params.id ? `NOM ${data.dest_nom} ${data.dest_name_kana}` : ''
+                    break
+                    case 'agings':
+                        return data.aging_sort === this.$route.params.id ? this.getAgingName(data.aging_sort) : '';
+                    break
+                }
+            })
+            category.map(data => {
+                const insertData = {
+                    text: `${data.title} 商品一覧${data.id === this.$route.params.category ? `　＞　${pageName[0]}` : ''}`,
+                    disabled: data.id === this.$route.params.category ? true : false,
+                    href: `${menuLinks[this.pageIdx].to}/${data.id}/`,
+                }
+                this.breadcrumbs.push(insertData)
+            })
+        },
+
+        // Get Aging Name
+        getAgingName(agingsSort) {
+            let agingName = String()
+            switch (agingsSort) {
+                case 'blanco': agingName = 'ブランコ'; break
+                case 'gold': agingName = 'ゴールド'; break
+                case 'reposado': agingName = 'レポサド'; break
+                case 'anejo': agingName = 'アネホ'; break
+                case 'extraanejo': agingName = 'エクストラアネホ'; break
+                case 'joven': agingName = 'ホベン'; break
+                case 'others': agingName = 'その他'; break
+                case 'cocktail': agingName = 'カクテル'; break
+                case 'mezcal': agingName = 'メスカル'; break
+            }
+            return agingName
+        }
     } 
 }
 </script>

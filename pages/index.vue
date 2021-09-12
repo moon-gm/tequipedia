@@ -14,7 +14,7 @@
                 <!-- Space for Header Height -->
 
                 <!-- Section Title -->
-                    <v-card>
+                    <v-card color="rgba(0, 0, 0, 0)" elevation="0">
                         <v-card-title
                             class="headline section"
                         >
@@ -126,7 +126,13 @@
 import { mainContents } from '~/assets/data/index.json'
 import { menuLinks } from '~/assets/data/globals.json'
 
-const pageIdx = 0
+// Get Page Index
+let pageIdx = Number()
+menuLinks.map((pageInfo, idx) => {
+    if(pageInfo.to === '/') pageIdx = idx
+})
+
+// Get Side Menu
 const sideMenuItems = []
 mainContents.map((item) => {
     sideMenuItems.push({

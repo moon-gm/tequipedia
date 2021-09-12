@@ -8,7 +8,7 @@
             >
 
                 <!-- Section Title -->
-                    <v-card>
+                    <v-card color="rgba(0, 0, 0, 0)" elevation="0">
                         <v-card-title class="headline section">
                             <v-icon
                                 left
@@ -33,6 +33,8 @@
                                 {{ subsecData.title }}
                             </v-card-title>
                         <!-- Sub Section Title -->
+
+                        <v-divider/>
 
                         <!-- Sub Section Contents -->
                             <v-card-text>
@@ -65,7 +67,11 @@
 import { mainContents } from '~/assets/data/references.json'
 import { menuLinks } from '~/assets/data/globals.json'
 
-const pageIdx = 3
+// Get Page Index
+let pageIdx = Number()
+menuLinks.map((pageInfo, idx) => {
+    if(pageInfo.to === '/references') pageIdx = idx
+})
 
 export default {
     data () {
