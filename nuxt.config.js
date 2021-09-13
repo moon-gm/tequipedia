@@ -42,13 +42,13 @@ export default {
   buildModules: [
     '@nuxt/typescript-build', // https://go.nuxtjs.dev/typescript
     '@nuxtjs/vuetify', // https://go.nuxtjs.dev/vuetify
+    '@nuxtjs/axios', // https://go.nuxtjs.dev/axios
+    '@nuxtjs/pwa', // https://go.nuxtjs.dev/pwa
+    '@nuxtjs/dotenv',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios', // https://go.nuxtjs.dev/axios
-    '@nuxtjs/pwa', // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/dotenv',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
