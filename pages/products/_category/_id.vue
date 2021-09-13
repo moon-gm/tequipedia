@@ -188,7 +188,7 @@ export default {
 
         // Get Request Data
         async getData(req) {
-            const reqPath = `/server/get${req.path}`
+            const reqPath = `/api/get${req.path}`
             await this.$axios.$get(reqPath)
             .then(response => {
                 console.log({'Path': reqPath, 'Response': response})

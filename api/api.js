@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 module.exports = {
-    path:    '/server',
+    path:    '/api',
     handler: app
 }
 

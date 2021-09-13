@@ -26,11 +26,5 @@
         "headers": { "cache-control": "s-maxage=1, stale-while-revalidate "},
         "dest": "/"
       }
-    ],
-    "env": {
-        "DB_HOST": "@db_host",
-        "DB_USER": "@db_user",
-        "DB_Name": "@db_name",
-        "DB_PASS": "@db_pass"
-    }
+    ]
   }
