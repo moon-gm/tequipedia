@@ -1,0 +1,475 @@
+[
+    [
+        {
+            "id": "blanco",
+            "name": "Blanco",
+            "name_kana": "ブランコ",
+            "type": "tequila",
+            "definition": "シルバー,プラタ,ホワイト,クリスタル",
+            "rule": "オーク樽による熟成をしないもの。または、熟成期間が60日以内であること。",
+            "description": "～熟成期間1ヶ月未満（シルバー・プラタ）～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "gold",
+            "name": "Gold",
+            "name_kana": "ゴールド",
+            "type": "tequila",
+            "definition": "琥珀色由来",
+            "rule": "特に規定が設けられていないが、ブランコとレポサドの中間のような色味のもの。",
+            "description": "～特に規定なし～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "reposado",
+            "name": "Reposado",
+            "name_kana": "レポサド",
+            "type": "tequila",
+            "definition": "休ませたの意",
+            "rule": "最低2ヶ月間のオーク樽により熟成したもの。",
+            "description": "～熟成期間最低2ヶ月～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "anejo",
+            "name": "Anejo",
+            "name_kana": "アネホ",
+            "type": "tequila",
+            "definition": "熟成させたの意",
+            "rule": "最低1年間のオーク樽により熟成したもの。オーク樽は600L以下のサイズであること。",
+            "description": "～熟成期間最低1年～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "extraanejo",
+            "name": "ExtraAnejo",
+            "name_kana": "エクストラアネホ",
+            "type": "tequila",
+            "definition": "アネホを超えた熟成",
+            "rule": "最低3年間のオーク樽により熟成したもの。オーク樽は600L以下のサイズであること。",
+            "description": "～熟成期間最低3年～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "joven",
+            "name": "Joven",
+            "name_kana": "ホベン",
+            "type": "tequila",
+            "definition": "オロ",
+            "rule": "ブランコとレポサド（またはアネホ）と混ぜたもの。",
+            "description": "～ブランコにレポサドかアネホを混合～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "others",
+            "name": "Others",
+            "name_kana": "その他",
+            "type": "others",
+            "definition": "aaa",
+            "rule": "aaa",
+            "description": "～上記以外の特殊なもの～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "cocktail",
+            "name": "Cocktail",
+            "name_kana": "カクテル",
+            "type": "cocktail",
+            "definition": "添加物が1%以上",
+            "rule": "糖蜜などの添加物が1%以上含まれるものは、カクテルやリキュールなどの呼称になる。",
+            "description": "～添加物ありのリキュール～",
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": "mezcal",
+            "name": "Mezcal",
+            "name_kana": "メスカル",
+            "type": "mezcal",
+            "definition": "メキシコ外産",
+            "rule": "メキシコの指定された地区以外のものはアガベスピリッツやメスカルという呼称になる。",
+            "description": "～産地の違い等によりテキーラと呼べないもの～",
+            "created_at": null,
+            "updated_at": null
+        }
+    ],
+    [
+        {
+            "local_id": "valles",
+            "local_name": "Valles",
+            "local_name_kana": "バジェス地方",
+            "area_id": "tequila",
+            "area_name": "Tequila",
+            "area_name_kana": "テキーラ地区"
+        },
+        {
+            "local_id": "valles",
+            "local_name": "Valles",
+            "local_name_kana": "バジェス地方",
+            "area_id": "elarenal",
+            "area_name": "El Arenal",
+            "area_name_kana": "エルアレナル地区"
+        },
+        {
+            "local_id": "valles",
+            "local_name": "Valles",
+            "local_name_kana": "バジェス地方",
+            "area_id": "amatitan",
+            "area_name": "Amatitan",
+            "area_name_kana": "アマティタン地区"
+        },
+        {
+            "local_id": "valles",
+            "local_name": "Valles",
+            "local_name_kana": "バジェス地方",
+            "area_id": "lasjuntas",
+            "area_name": "Lasjuntas",
+            "area_name_kana": "ラス・フンタス地区"
+        },
+        {
+            "local_id": "altos",
+            "local_name": "Los Altos",
+            "local_name_kana": "ロスアルトス地方",
+            "area_id": "arandas",
+            "area_name": "Arandas",
+            "area_name_kana": "アランダス地区"
+        },
+        {
+            "local_id": "altos",
+            "local_name": "Los Altos",
+            "local_name_kana": "ロスアルトス地方",
+            "area_id": "atotonirco",
+            "area_name": "Atotonirco",
+            "area_name_kana": "アトトニルコ地区"
+        },
+        {
+            "local_id": "altos",
+            "local_name": "Los Altos",
+            "local_name_kana": "ロスアルトス地方",
+            "area_id": "jesusmaria",
+            "area_name": "Jesusmaria",
+            "area_name_kana": "ヘススマリア地区"
+        },
+        {
+            "local_id": "altos",
+            "local_name": "Los Altos",
+            "local_name_kana": "ロスアルトス地方",
+            "area_id": "ayotlan",
+            "area_name": "Ayotlan",
+            "area_name_kana": "アヨトラン地区"
+        },
+        {
+            "local_id": "centro",
+            "local_name": "Centro",
+            "local_name_kana": "ソナ・セントロ地方",
+            "area_id": "zapopan",
+            "area_name": "Zapopan",
+            "area_name_kana": "サポパン地区"
+        },
+        {
+            "local_id": "centro",
+            "local_name": "Centro",
+            "local_name_kana": "ソナ・セントロ地方",
+            "area_id": "juanakatlan",
+            "area_name": "Juanakatlan",
+            "area_name_kana": "ファナカトラン地区"
+        },
+        {
+            "local_id": "centro",
+            "local_name": "Centro",
+            "local_name_kana": "ソナ・セントロ地方",
+            "area_id": "guadalajara",
+            "area_name": "Guadalajara",
+            "area_name_kana": "グアダラハラ地区"
+        }
+    ],
+    [
+        {
+            "dest_name": "サウザ蒸留所",
+            "nom": "1102",
+            "brand_name": "サウザ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "クエルボ蒸留所",
+            "nom": "1122",
+            "brand_name": "ホセ・クエルボ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "ペルノ・リカール蒸留所",
+            "nom": "1111",
+            "brand_name": "マリアチ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アランダス地区"
+        },
+        {
+            "dest_name": "フィノス・デ・アガベ蒸留所",
+            "nom": "1416",
+            "brand_name": "アラクラン",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "グルポ・テキレロ・デ・ロスアルトス蒸留所",
+            "nom": "1548",
+            "brand_name": "アハトロ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アランダス地区"
+        },
+        {
+            "dest_name": "ラ・アルテ－ニャ蒸留所",
+            "nom": "1139",
+            "brand_name": "エルテソロ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アランダス地区"
+        },
+        {
+            "dest_name": "ゴンザレス・ゴンザレス蒸留所",
+            "nom": "1143",
+            "brand_name": "オーレ",
+            "state_name": "ハリスコ州",
+            "local_name": "ソナ・セントロ地方",
+            "area_name": "サポパン地区"
+        },
+        {
+            "dest_name": "オレンダイン蒸留所",
+            "nom": "1110",
+            "brand_name": "オレンダイン",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "カミノ・レアル蒸留所",
+            "nom": "1487",
+            "brand_name": "カミノ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アランダス地区"
+        },
+        {
+            "dest_name": "カンパニャ・テキレラ・デ・アランダス蒸留所",
+            "nom": "1460",
+            "brand_name": "エルチャッロ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アランダス地区"
+        },
+        {
+            "dest_name": "カーサ・エラドゥーラ蒸留所",
+            "nom": "1119",
+            "brand_name": "エラドゥーラ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "アマティタン地区"
+        },
+        {
+            "dest_name": "コラレホ蒸留所",
+            "nom": "1368",
+            "brand_name": "コラレホ",
+            "state_name": "グァナファト州",
+            "local_name": "その他",
+            "area_name": "ペンハモ地区"
+        },
+        {
+            "dest_name": "カサドレス蒸留所",
+            "nom": "1487",
+            "brand_name": "カサドレス",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アランダス地区"
+        },
+        {
+            "dest_name": "インモビリアリア・マスト蒸留所",
+            "nom": "1462",
+            "brand_name": "ポルフィディオ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "ラス・フンタス地区"
+        },
+        {
+            "dest_name": "ファナカトラン蒸留所",
+            "nom": "1551",
+            "brand_name": "カサデルナ",
+            "state_name": "ハリスコ州",
+            "local_name": "ソナ・セントロ地方",
+            "area_name": "ファナカトラン地区"
+        },
+        {
+            "dest_name": "ドンフリオ蒸留所",
+            "nom": "1449",
+            "brand_name": "ドンフリオ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アトトニルコ地区"
+        },
+        {
+            "dest_name": "ラ・コフラディア蒸留所",
+            "nom": "1137",
+            "brand_name": "カサノブレ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "テキーラス・フィノス蒸留所",
+            "nom": "1472",
+            "brand_name": "カー",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "パトロン蒸留所",
+            "nom": "1492",
+            "brand_name": "パトロン",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アトトニルコ地区"
+        },
+        {
+            "dest_name": "ロス・アルトス・ラ・ホヤ蒸留所",
+            "nom": "1555",
+            "brand_name": "ランチョラホヤ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アヨトラン地区"
+        },
+        {
+            "dest_name": "カーサ・カマレナ蒸留所",
+            "nom": "1456",
+            "brand_name": "カスコヴィエホ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アランダス地区"
+        },
+        {
+            "dest_name": "ニュートン・エ・イホス蒸留所",
+            "nom": "1173",
+            "brand_name": "エルデスティラダー",
+            "state_name": "ハリスコ州",
+            "local_name": "ソナ・セントロ地方",
+            "area_name": "サポパン地区"
+        },
+        {
+            "dest_name": "リコーレス・ヴェラクルス蒸留所",
+            "nom": "1433",
+            "brand_name": "イホスデヴィジャ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アトトニルコ地区"
+        },
+        {
+            "dest_name": "エクセハシエンダ・ロス・カミチネス蒸留所",
+            "nom": "1122",
+            "brand_name": "グランセンテナリオ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "デル・バジェ・デ・テキーラ蒸留所",
+            "nom": "1438",
+            "brand_name": "ドーニャ・セリア",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "バランカ・デ・アマティタン蒸留所",
+            "nom": "1473",
+            "brand_name": "ドンフェルナンド",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "アマティタン地区"
+        },
+        {
+            "dest_name": "レイロス蒸留所",
+            "nom": "1489",
+            "brand_name": "ハッサンズ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "テキレラ・ラ・マグダレナ蒸留所",
+            "nom": "1463",
+            "brand_name": "トレスソンブレロス",
+            "state_name": "ハリスコ州",
+            "local_name": "ソナ・セントロ地方",
+            "area_name": "サポパン地区"
+        },
+        {
+            "dest_name": "テキレラ・ミラグロ蒸留所",
+            "nom": "1559",
+            "brand_name": "ミラグロ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "ヘススマリア地区"
+        },
+        {
+            "dest_name": "カーサ・デ・ピエドラ蒸留所",
+            "nom": "1586",
+            "brand_name": "チャムコス",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "エルアレナル地区"
+        },
+        {
+            "dest_name": "テキレーニャ蒸留所",
+            "nom": "1146",
+            "brand_name": "ドンフラノ",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "テキーラ地区"
+        },
+        {
+            "dest_name": "テキーラス・デル・セニョール蒸留所",
+            "nom": "1124",
+            "brand_name": "ラチカ",
+            "state_name": "ハリスコ州",
+            "local_name": "ソナ・セントロ地方",
+            "area_name": "グアダラハラ地区"
+        },
+        {
+            "dest_name": "エル・ビエヒート蒸留所",
+            "nom": "1107",
+            "brand_name": "カーマ",
+            "state_name": "ハリスコ州",
+            "local_name": "ロスアルトス地方",
+            "area_name": "アトトニルコ地区"
+        },
+        {
+            "dest_name": "トレス・ムヘレス蒸留所",
+            "nom": "1466",
+            "brand_name": "トレスムヘレス",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "アマティタン地区"
+        },
+        {
+            "dest_name": "テキレラ・ラスフンタス蒸留所",
+            "nom": "1500",
+            "brand_name": "雫",
+            "state_name": "ハリスコ州",
+            "local_name": "バジェス地方",
+            "area_name": "アマティタン地区"
+        }
+    ]
+]

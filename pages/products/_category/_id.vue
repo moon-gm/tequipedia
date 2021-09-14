@@ -140,6 +140,7 @@
 <script>
 import { category, mainContents } from '~/assets/data/products.json'
 import { menuLinks } from '~/assets/data/globals.json'
+import dbData from '~/assets/fromDatabase/products.json'
 
 export default {
     data () {
@@ -188,28 +189,23 @@ export default {
 
         // Get Request Data
         async getData(req) {
-            const reqPath = `/api/get${req.path}`
-            await this.$axios.$get(reqPath)
-            .then(response => {
-                console.log({'Path': reqPath, 'Response': response})
 
-                switch (req.path) {
-                    case `/syouhin/${this.$route.params.category}/all`:
-                        // Set Sub Menu
-                        this.setSubMenuData(response)
-                        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
-                    break
-                    default:
-                        // Set Main Contents & Page Menu & Section Category
-                        this.setProductsData(response)
-                        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
-                        // Set Breadcrumbs
-                        this.setBreadcrumbs(response)
-                    break
-                }
+            switch (req.path) {
+                case `/syouhin/${this.$route.params.category}/all`:
+                    // Set Sub Menu
 
-            })
-            .catch(error => console.log('ERROR', error))
+                    this.setSubMenuData(dbData[this.$route.params.category])
+                    this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+                break
+                default:
+                    // Set Main Contents & Page Menu & Section Category
+                    this.setProductsData(dbData['syouhin'])
+                    this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
+                    // Set Breadcrumbs
+                    this.setBreadcrumbs(dbData['syouhin'])
+                break
+            }
+
         },
 
         // Set Response Data for MainContents & Page Menu
@@ -218,7 +214,24 @@ export default {
             // Set MainContents & Page Menu
             this.mainContents = []
             this.pageMenuLists = []
+            let array = []
             response.map(data => {
+                switch (this.$route.params.category) {
+                    case 'brands':
+                        this.$route.params.id === data.brand_id && array.push(data)
+                    break
+                    case 'destiladors':
+                        this.$route.params.id === data.dest_nom && array.push(data)
+                    break
+                    case 'agings':
+                        this.$route.params.id === data.aging_sort && array.push(data)
+                    break
+                    case 'areas':
+                        this.$route.params.id === data.area_id && array.push(data)
+                    break
+                }
+            })
+            array.map(data => {
 
                 // Set MainContents
                 const insertData1 = {

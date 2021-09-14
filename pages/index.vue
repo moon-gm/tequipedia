@@ -125,6 +125,7 @@
 <script>
 import { mainContents } from '~/assets/data/index.json'
 import { menuLinks } from '~/assets/data/globals.json'
+import dbData from '~/assets/fromDatabase/index.json'
 
 // Get Page Index
 let pageIdx = Number()
@@ -165,9 +166,9 @@ export default {
 
         // Get Request Data & Set Response Data
         const requests = [
-            {path: '/locals/category/joinA'},
-            {path: '/agings/category/all'},
-            {path: '/destiladors/category/joinABLS'},
+            {path: '/locals/category/joinA', json: dbData[1]},
+            {path: '/agings/category/all', json: dbData[0]},
+            {path: '/destiladors/category/joinABLS', json: dbData[2]},
         ]
         requests.map(req => this.getData(req)) 
 
@@ -177,13 +178,7 @@ export default {
 
         // Get Request Data
         async getData(req) {
-            const reqPath = `/api/get${req.path}`
-            await this.$axios.$get(reqPath)
-            .then(response => {
-                console.log({'Request Path': reqPath, 'Response': response})
-                this.setData(response, req.path.split('/')[1])
-            })
-            .catch(error => console.log('ERROR', error))
+            this.setData(req.json, req.path.split('/')[1])
         },
 
         // Set Response Data
