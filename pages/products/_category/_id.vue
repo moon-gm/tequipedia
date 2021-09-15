@@ -272,16 +272,16 @@ export default {
             let insertData = {}
             switch (this.$route.params.category) {
                 case 'brands':
-                    insertData = { title: response[0].brand_name }
+                    insertData = { title: array[0].brand_name }
                 break
                 case 'destiladors':
-                    insertData = { title: `NOM ${response[0].dest_nom} ${response[0].dest_name_kana}` }
+                    insertData = { title: `NOM ${array[0].dest_nom} ${array[0].dest_name_kana}` }
                 break
                 case 'agings':
-                    insertData = { title: this.getAgingName(response[0].aging_sort) }
+                    insertData = { title: this.getAgingName(array[0].aging_sort) }
                 break
                 case 'areas':
-                    insertData = { title: `${response[0].local_name_kana} ${response[0].area_name_kana}` }
+                    insertData = { title: `${array[0].local_name_kana} ${array[0].area_name_kana}` }
                 break
             }
             this.categories = [
@@ -346,7 +346,24 @@ export default {
 
         // Set Breadcrumbs
         setBreadcrumbs(response) {
-            const pageName = response.map(data => {
+            let array = []
+            response.map(data => {
+                switch (this.$route.params.category) {
+                    case 'brands':
+                        this.$route.params.id === data.brand_id && array.push(data)
+                    break
+                    case 'destiladors':
+                        this.$route.params.id === data.dest_nom && array.push(data)
+                    break
+                    case 'agings':
+                        this.$route.params.id === data.aging_sort && array.push(data)
+                    break
+                    case 'areas':
+                        this.$route.params.id === data.area_id && array.push(data)
+                    break
+                }
+            })
+            const pageName = array.map(data => {
                 switch (this.$route.params.category) {
                     case 'brands':
                         return data.brand_id === this.$route.params.id ? data.brand_name : ''
