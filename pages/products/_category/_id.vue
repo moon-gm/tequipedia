@@ -100,7 +100,17 @@
                                                 v-if="secData.list"
                                                 cols="auto"
                                             >
-                                                <v-card-title>Product Data</v-card-title>
+                                                <v-card-title>
+                                                    Product Data
+                                                    <v-btn
+                                                        absolute right
+                                                        target="_blank"
+                                                        :href="secData.url"
+                                                        color="blue darken-2"
+                                                    >
+                                                        商品購入
+                                                    </v-btn>
+                                                </v-card-title>
                                                 <v-divider/>
                                                 <ul class="list-style">
                                                     <li
@@ -111,14 +121,6 @@
                                                         {{ list }}
                                                     </li>
                                                 </ul>
-                                                <v-btn
-                                                    absolute right top
-                                                    target="_blank"
-                                                    :href="secData.url"
-                                                    color="blue darken-2"
-                                                >
-                                                    商品購入
-                                                </v-btn>
                                             </v-col>
                                         <!-- Data Box -->
 
@@ -231,16 +233,16 @@ export default {
                         }
                     ],
                     list: [
-                        `アルコール　＿＿＿＿　${data.alc_degree}`,
-                        `アガベ使用　＿＿＿＿　${data.mix_degree === 'Mixed' ? 'ミクスト（51%以上）' : data.mix_degree === 'Liquor' ? 'リキュール（51%未満 / 添加物1%以上）' : data.mix_degree}`,
-                        `蒸留所名称　＿＿＿＿　${data.dest_name_kana}`,
-                        `蒸留所番号　＿＿＿＿　NOM ${data.dest_nom}`,
-                        `参考価格帯　＿＿＿＿　${data.min_price}円 ～`,
-                        `生産州地域　＿＿＿＿　${data.local_name_kana} ${data.area_name_kana}`,
-                        `商品の情報　＿＿＿＿　${data.information}`,
-                        `薫香・風味　＿＿＿＿　${data.review_flavor}`,
-                        `トップ・味　＿＿＿＿　${data.review_top}`,
-                        `余韻・後味　＿＿＿＿　${data.review_after}`,
+                        `アルコール　＿　${data.alc_degree}`,
+                        `アガベ使用　＿　${data.mix_degree === 'Mixed' ? 'ミクスト（51%以上）' : data.mix_degree === 'Liquor' ? 'リキュール（51%未満 / 添加物1%以上）' : data.mix_degree}`,
+                        `蒸留所名称　＿　${data.dest_name_kana}`,
+                        `蒸留所番号　＿　NOM ${data.dest_nom}`,
+                        `参考価格帯　＿　${data.min_price}円 ～`,
+                        `生産州地域　＿　${data.local_name_kana} ${data.area_name_kana}`,
+                        `商品の情報　＿　${data.information}`,
+                        `薫香・風味　＿　${data.review_flavor}`,
+                        `トップ・味　＿　${data.review_top}`,
+                        `余韻・後味　＿　${data.review_after}`,
                     ],
                     url: data.syouhin_url,
                 }
@@ -385,6 +387,10 @@ export default {
     .list-style {
         padding: 20px;
         list-style-type: none;
+        li {
+            padding-left: 10em;
+            text-indent: -10em;
+        }
     }
     .paragraph-style {
         padding-left: 1em;
