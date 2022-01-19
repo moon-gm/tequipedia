@@ -91,6 +91,14 @@ export default {
 
   // Server API
   serverMiddleware: [
-    { path: '/api', handler: '~/api/api.js' },
-  ]
+    { path: '/api', handler: '~/api/api.ts' },
+  ],
+
+  typescript: {
+    typeCheck: {
+      eslint: {
+        files: './**/*.{ts,vue}'
+      }
+    }
+  }
 }

@@ -63,31 +63,20 @@
     </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import { mainContents } from '~/assets/data/references.json'
-import { menuLinks } from '~/assets/data/globals.json'
-
-// Get Page Index
-let pageIdx = Number()
-menuLinks.map((pageInfo, idx) => {
-    if(pageInfo.to === '/references') pageIdx = idx
-})
+import { setBaseData } from '~/components/common-methods'
 
 export default {
-    data () {
-        return {
-            mainContents: mainContents,
-            pageInfo: menuLinks[pageIdx],
-            subMenuLists: [],
-            pageMenuLists: [],
-        }
+    data() {
+        return setBaseData('/references', mainContents)
     },
 
-    mounted () {
+    mounted() {
         // Set Sub Menu
-        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+        this.$nuxt.$emit('getSubMenuLists', this.subMenuLists)
         // Set Page Menu
-        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
+        this.$nuxt.$emit('getPageMenuLists', this.pageMenuLists)
     }
 
 }

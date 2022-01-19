@@ -95,7 +95,10 @@
                                         v-if="subsecData.list"
                                         class="list-style"
                                     >
-                                        <li v-for="(list) in subsecData.list">
+                                        <li
+                                            v-for="(list, idx) in subsecData.list"
+                                            :key="idx"
+                                        >
                                             {{ list }}
                                         </li>
                                     </ul>
@@ -122,101 +125,92 @@
     </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import { mainContents } from '~/assets/data/index.json'
-import { menuLinks } from '~/assets/data/globals.json'
+import { PageMenuList } from '~/assets/types/types'
+import { setBaseData } from '~/components/common-methods'
 
-// Get Page Index
-let pageIdx = Number()
-menuLinks.map((pageInfo, idx) => {
-    if(pageInfo.to === '/') pageIdx = idx
-})
-
-// Get Page Menu
-const pageMenuLists = []
-mainContents.map((item) => {
+const pageMenuLists: PageMenuList[] = []
+for (const pageMenuList of mainContents) {
     pageMenuLists.push({
-        title: item.title,
-        to: `/#${item.id}`
+        title: pageMenuList.title,
+        to: `/#${pageMenuList.id}`
     })
-})
+}
+
+const requestPaths = [
+    '/locals/category/joinA',
+    '/agings/category/all',
+    '/destiladors/category/joinABLS',
+]
 
 export default {
-    data () {
-        return {
-            mainContents: mainContents,
-            pageInfo: menuLinks[pageIdx],
-            subMenuLists: [],
-            pageMenuLists: pageMenuLists,
+    data() {
+        const baseData = setBaseData('/', mainContents)
+        return Object.assign(baseData, {
+            pageMenuLists,
             headerHeight: 0,
-        }
+        })
     },
 
-    mounted () {
+    async mounted() {
 
         // Set Sub Menu
-        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+        this.$nuxt.$emit('getSubMenuLists', this.subMenuLists)
         // Set Page Menu
-        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
+        this.$nuxt.$emit('getPageMenuLists', this.pageMenuLists)
 
         // Get Header Height & Scroll Setting
         this.headerHeight = document.getElementsByClassName('getHeader')[0].clientHeight
         window.scrollTo(0, this.headerHeight)
 
         // Get Request Data & Set Response Data
-        const requests = [
-            {path: '/locals/category/joinA'},
-            {path: '/agings/category/all'},
-            {path: '/destiladors/category/joinABLS'},
-        ]
-        requests.map(req => this.getData(req)) 
+        for (const requestPath of requestPaths) {
+            await this.getInfomationData(requestPath)
+        } 
 
     },
 
     methods: {
 
-        // Get Request Data
-        async getData(req) {
-            const reqPath = `/api/get${req.path}`
-            await this.$axios.$get(reqPath)
+        async getInfomationData(pathName: string): Promise<void> {
+            const requestPath = `/api/get${pathName}`
+            await this.$axios.$get(requestPath)
             .then(response => {
-                console.log({'Request Path': reqPath, 'Response': response})
-                this.setData(response, req.path.split('/')[1])
-            })
-            .catch(error => console.log('ERROR', error))
-        },
-
-        // Set Response Data
-        setData(response, patern) {
-            let insertData = {}
-            response.map(data => {
-                switch (patern) {
-                    case 'locals':
-                        insertData = {
-                            local: data.local_name_kana,
-                            area: data.area_name_kana
-                        }
-                        this.mainContents[2].contents[1].table.items.push(insertData);
-                    break
-                    case 'agings':
-                        insertData = {
-                            name: data.name_kana,
-                            mean: data.definition,
-                            rule: data.rule
-                        }
-                        this.mainContents[5].contents[0].table.items.push(insertData);
-                    break
-                    case 'destiladors':
-                        insertData = {
-                            local: data.local_name === 'その他' ? 'ハリスコ州外' : data.local_name,
-                            dest: data.dest_name,
-                            nom: data.nom,
-                            brand: data.brand_name,
-                            area: data.local_name === 'その他' ? data.state_name + data.area_name : data.area_name,
-                        }
-                        this.mainContents[8].contents[0].table.items.push(insertData);
-                    break
+                let insertData = {}
+                const type: string = pathName.split('/')[1]
+                for (const data of response) {
+                    switch (type) {
+                        case 'locals':
+                            insertData = {
+                                local: data.local_name_kana,
+                                area: data.area_name_kana
+                            }
+                            this.mainContents[2].contents[1].table.items.push(insertData);
+                        break
+                        case 'agings':
+                            insertData = {
+                                name: data.name_kana,
+                                mean: data.definition,
+                                rule: data.rule
+                            }
+                            this.mainContents[5].contents[0].table.items.push(insertData);
+                        break
+                        case 'destiladors':
+                            insertData = {
+                                local: data.local_name === 'その他' ? 'ハリスコ州外' : data.local_name,
+                                dest: data.dest_name,
+                                nom: data.nom,
+                                brand: data.brand_name,
+                                area: data.local_name === 'その他' ? data.state_name + data.area_name : data.area_name,
+                            }
+                            this.mainContents[8].contents[0].table.items.push(insertData);
+                        break
+                    }
                 }
+            })
+            .catch(error => {
+                if(error) throw error
             })
         },
 

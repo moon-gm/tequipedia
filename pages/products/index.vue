@@ -39,25 +39,27 @@
     </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import { category } from '~/assets/data/products.json'
+import { PageMenuList, SubMenuList, CategoryMenuList } from '~/assets/types/types'
+
 
 export default {
     data () {
         return {
-            categoryMenuLists: category,
-            subMenuLists: [],
-            pageMenuLists: [],
+            categoryMenuLists: category as CategoryMenuList[],
+            subMenuLists: [] as SubMenuList[],
+            pageMenuLists: [] as PageMenuList[],
         }
     },
 
     mounted () {
         // Set Category Menu
-        this.$nuxt.$emit('getPageMenuItems', this.categoryMenuLists)
+        this.$nuxt.$emit('getCategoryMenuLists', this.categoryMenuLists)
         // Set Sub Menu
-        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+        this.$nuxt.$emit('getSubMenuLists', this.subMenuLists)
         // Set Page Menu
-        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
+        this.$nuxt.$emit('getPageMenuLists', this.pageMenuLists)
     }
 }
 </script>

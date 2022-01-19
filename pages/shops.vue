@@ -64,37 +64,33 @@
     </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import { mainContents } from '~/assets/data/shops.json'
-import { menuLinks } from '~/assets/data/globals.json'
+import { setBaseData } from '~/components/common-methods'
 
-// Get Page Index
-let pageIdx = Number()
-menuLinks.map((pageInfo, idx) => {
-    if(pageInfo.to === '/shops') pageIdx = idx
-})
+type ShopData = {
+    name: string,
+    access?: string,
+    description: string,
+    url: string,
+}
 
 export default {
-    data () {
-        return {
-            mainContents: mainContents,
-            pageInfo: menuLinks[pageIdx],
-            subMenuLists: [],
-            pageMenuLists: [],
-        }
+    data() {
+        return setBaseData('/shops', mainContents)
     },
 
-    mounted () {
+    mounted() {
         // Set Sub Menu
-        this.$nuxt.$emit('getSubMenuItems', this.subMenuLists)
+        this.$nuxt.$emit('getSubMenuLists', this.subMenuLists)
         // Set Page Menu
-        this.$nuxt.$emit('getSideMenuItems', this.pageMenuLists)
+        this.$nuxt.$emit('getPageMenuLists', this.pageMenuLists)
     },
 
     methods: {
         // External Link
-        externalLink (listData) {
-            window.open(listData.url, '_blank') // v-data-table @click:rowでは、第一引数にクリックした行のObjectが渡される
+        externalLink(shopData: ShopData): void {
+            window.open(shopData.url, '_blank') // v-data-table @click:rowでは、第一引数にクリックした行のObjectが渡される
         }
     }
 
